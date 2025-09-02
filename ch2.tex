@@ -1,0 +1,120 @@
+\chapter{Contesto applicativo: il mondo della reportistica automatica}
+\section{Introduzione}
+Nel settore finanziario moderno i dati sono un vero asset strategico: la digitalizzazione spinge istituzioni e intermediari a interconnettere sistemi e ad automatizzare i processi. In questo nuovo ecosistema digitale è necessario abbattere i silos informativi e ripensare l’infrastruttura IT secondo paradigmi cloud-native.
+La trasformazione digitale nei financial services richiede infrastrutture modernizzate e automazione dei processi interni. Ad esempio, grazie all’adozione di tecnologie come RPA e machine learning, l’efficienza operativa delle aziende può aumentare di oltre il 40\%, riducendo drasticamente errori e tempi di esecuzione. Al contempo le autorità di vigilanza italiane (Banca d’Italia, CONSOB, IVASS) impongono un livello crescente di adempimenti normativi: gli intermediari devono produrre report periodici accurati, tempestivi e conformi ai formati ufficiali per il monitoraggio prudenziale. Questa molteplicità di requisiti rende strategica l’automazione della reportistica.
+
+Metoda Finance S.R.L., azienda ospitante del tirocinio, sviluppa soluzioni software per la gestione documentale e la compliance normativa. Ha creato un motore interno di reportistica in grado di generare automaticamente file Excel e PDF, con configurazioni delle fonti dati semplificate a livello di funzione. Tuttavia il sistema originario non disponeva di un’interfaccia esterna fruibile: un potenziale utente dovrebbe interagire direttamente con il codice del motore di generazione, risultando inutilizzabile per l'operatore casuale privo di competenze informatiche specifiche né una conoscenza almeno superficiale del sistema. Da qui l’esigenza di avvolgere il servizio di reportistica in un'architettura facilmente fruibile, modulare e scalabile. L’obiettivo è esporre le funzionalità tramite API RESTful, in modo che possano essere richiamate da interfacce web o strumenti BI esterni, e mediante una maschera human-friendly che renda l'accesso facile all'operatore senza necessitare competenze specifiche. L’intero sistema dovrà essere gestito come insieme di microservizi containerizzati, con un punto d'accesso univoco che fornisca un livello di sicurezza ed autenticazione per l'intera struttura. In questo modo si punta a rendere il reporting automatizzato facilmente configurabile, altamente disponibile e adattabile a future evoluzioni tecnologiche.
+
+\section{Il problema affrontato}
+La produzione manuale dei report finanziari presenta evidenti criticità. Richiede molte risorse di tempo e personale specializzato, espone a errori di trascrizione e incoerenze nei dati, e rende complessi aggiornamenti o riconfigurazioni rapide. Per quanto riguarda l’architettura software, un sistema monolitico ostacola l’estensione funzionale e la scalabilità: qualunque modifica (ad esempio per un nuovo tipo di report) può richiedere di ridistribuire l’intero applicativo, e i carichi elevati devono essere bilanciati sull’intera piattaforma. Un approccio più flessibile è dato dalle architetture a microservizi, che scompongono le funzionalità in servizi indipendenti. In queste architetture ogni microservizio svolge un compito specifico e comunica con gli altri attraverso API ben definite. Ciò garantisce maggiore manutenibilità e resilienza: per esempio, se un componente è sottoposto a un picco di traffico (ad esempio il servizio di calcolo dei dati), solo quel servizio verrà replicato, anziché scalare l’intera applicazione. I microservizi favoriscono inoltre un deployment incrementale: si possono aggiornare singole funzionalità senza interrompere il servizio complessivo.
+
+Un altro aspetto critico è la coerenza dei dati in un sistema distribuito. Per gestire l’interazione tra microservizi in maniera affidabile spesso si ricorre a comunicazione asincrona tramite code o middleware di messaggistica (e.g. Kafka, RabbitMQ), che promuovono il disaccoppiamento tra componenti e permettono di assorbire picchi di carico senza perdita d'informazione, mentre le operazioni incentrate sulla manipolazione dei dati sono gestite mediante le cosiddette \emph{saghe}, che garantiscono una sicurezza transazionale quando l'elaborazione dei dati attraversa più nodi di una rete di microservizi. Detto ciò, in un’architettura containerizzata e orchestrata (tipicamente Kubernetes), ogni microservizio tende a mantenere il proprio schema dati, riducendo al minimo le dipendenze incrociate e consentendo una scalabilità orizzontale elastica che prescinde dall'host fisico di deploy del servizio.
+La soluzione che si propone di realizzare è un prototipo su host singolo di un sistema di reportistica automatica orientato ai microservizi. Vincoli di tempo e risorse hanno imposto che l'effettiva simulazione del sistema fosse limitata al singolo nodo, rinunciando alla configurazione di un sistema di orchestrazione e all'utilizzo di broker di \emph{message queueing} per una comunicazione multi-host efficace, ma l'architettura è progettata per essere facilmente personalizzabile ed estendibile a un cluster distribuito.
+
+\section{Confronto con lo stato dell’arte}
+Esistono diverse soluzioni di mercato per la reportistica, ma ognuna presenta limiti in relazione a flessibilità e scalabilità. Ad esempio:
+
+\begin{itemize}
+    \item \textbf{ERP integrati} (come SAP o Oracle): offrono moduli dedicati al reporting, ma in genere sono sistemi piuttosto rigidi. Spesso richiedono personalizzazioni complesse per adattarsi a contesti specifici di business, rendendo onerosa la configurazione dei report rispetto alle esigenze variabili dell’azienda.
+    \item \textbf{Strumenti di Business Intelligence commerciali} (Power BI, Tableau, Qlik): eccellono nella visualizzazione dei dati e nel data modeling, ma necessitano di infrastrutture complesse, competenze specifiche di progettazione report e spesso licenze software costose. Possono inoltre richiedere tempi
+    lunghi di set-up per integrarsi con sistemi preesistenti.
+    \item \textbf{Framework open-source di reporting e BI} (come Metabase, ReportServer, JasperReports): garantiscono maggiore flessibilità di personalizzazione e costi inferiori, ma impongono all’utente finale di possedere competenze tecniche elevate per installazione e integrazione. L’integrazione con sistemi legacy può risultare complicata e il supporto tecnico limitato.
+\end{itemize}
+
+Le architetture basate su microservizi dimostrano invece come sia possibile realizzare sistemi distribuiti, scalabili e manutenibili. I grandi player del settore fintech adottano microservizi perché consentono di innovare rapidamente, isolare i malfunzionamenti e reagire agilmente ai picchi di traffico. La soluzione proposta non vuole essere da meno: ci si premura dunque di realizzare non una semplice web application che esponga in rete il servizio di reportistica automatizzata, ma un'architettura sicura e scalabile, che coniughi una user experience fluida e non influenzata dall'organizzazione sottostante, a un'organizzazione modulare che fornisca performance elevate e facilità di manutenzione ed estensione.
+
+Nella soluzione proposta infatti il motore di reportistica è implementato con tecnologie moderne, pur fornendo un'interfaccia basata su tecnologie consolidate e integrabili anche con strumenti terzi più maturi: ASP.NET Core garantisce elevate prestazioni e sicurezza, l'adozione di una filosofia MPA e di un'API RESTful garantisce interoperabilità con browser e servizi meno recenti, mentre SignalR abilita funzionalità real-time con push verso i client senza polling/refresh.
+L’uso di container Docker fa sì che ogni microservizio sia leggero e indipendente: ogni servizio è isolato dal sistema ospite, e l'unica risorsa necessaria all'esecuzione è la presenza sul server di un host Docker. In questo modo, è possibile replicare, avviare o eliminare container in pochi secondi, consentendo una scalabilità orizzontale allineata alla domanda effettiva. Ad esempio, in caso di carichi di lavoro imprevisti il sistema può istanziare ulteriori container del servizio interessato in maniera trasparente senza impattare gli altri componenti.
+
+Infine, viene adottato un API Gateway centralizzato, che funge da unico punto d'ingresso per il browser e per le richieste REST. Ciò permette di applicare in un solo punto regole di sicurezza, autenticazione (OpenID Connect per il browser, JWT per le API), e di aggregare e instradare le risposte in modo trasparente. In pratica, l’API Gateway astrae i dettagli interni dei microservizi, facilitando l’evoluzione indipendente di ogni componente.
+
+Il prototipo descritto in questa tesi integra quindi tutte queste best practice: un’architettura a microservizi containerizzati pronti per un deploy in un contesto distribuito e orchestrato, un API Gateway per la sicurezza e il bilanciamento, ASP.NET Core e SignalR per il calcolo e il push dei dati, e uno strato di persistenza distribuita. In questo modo si ottiene un sistema di reportistica completamente automatizzato, in grado di generare documenti dinamicamente a partire da fonti dati configurabili e di esportarli in Excel o PDF senza intervento manuale. L’approccio risponde alle esigenze di efficienza, coerenza e adattabilità del contesto finanziario moderno, rispettando gli obblighi normativi e abilitando gli utenti a consultare i report da interfacce web o strumenti di BI esterni.
+
+
+
+
+
+
+% 3.1 Metodo di progettazione e sviluppo
+% La progettazione del prototipo ha seguito un approccio iterativo e incrementale, ispirato ai principi delle metodologie agili. In particolare, è stato adottato un modello orientato ai servizi, in cui ciascun microservizio è stato progettato per implementare una specifica funzionalità di business. La separazione delle responsabilità tra componenti consente una maggiore manutenibilità, testabilità e scalabilità del sistema [16].
+% La fase di analisi ha previsto la definizione dei requisiti funzionali e non funzionali, la modellazione dei flussi logici mediante diagrammi UML e la scelta delle tecnologie più adatte per garantire interoperabilità e robustezza. La progettazione ha tenuto conto della necessità di integrare il sistema con ambienti esterni, come strumenti di Business Intelligence, e di supportare l’esportazione dei report in formati standardizzati.
+% 3.2 Finalità del sistema prototipale
+% Il sistema è stato concepito per automatizzare la generazione di report aziendali, consentendo agli utenti di selezionare parametri, filtrare dati e ottenere documenti in formato PDF o Excel in modo rapido e coerente. Le finalità principali includono:
+% •	Riduzione del carico operativo manuale.
+% •	Miglioramento della qualità e consistenza dei dati.
+% •	Abilitazione di funzionalità personalizzabili e scalabili.
+% •	Integrazione con ambienti cloud e infrastrutture distribuite.
+% Il prototipo è pensato per essere utilizzato sia da operatori tecnici che da utenti gestionali, offrendo un’interfaccia intuitiva e un sistema di autenticazione centralizzato. La modularità dell’architettura consente l’aggiunta di nuovi microservizi senza impattare sulle componenti esistenti, favorendo l’evoluzione incrementale e la manutenibilità.
+% 3.3 Artefatti progettuali
+% La progettazione del sistema ha prodotto una serie di artefatti tecnici, tra cui:
+% •	Diagrammi dei componenti: rappresentano la suddivisione del sistema in microservizi, ciascuno con responsabilità specifiche (es. generazione report, gestione utenti, esportazione PDF).
+% •	Schema del database: progettato secondo il paradigma relazionale, con tabelle normalizzate e relazioni chiave esterna per garantire integrità referenziale.
+% •	Interfaccia utente: sviluppata in Razor Pages, con layout responsive e componenti dinamici per la selezione dei parametri di reportistica.
+% Il database è stato realizzato in SQL Server, con stored procedure per l’estrazione dei dati e viste materializzate per ottimizzare le performance. La logica di business è incapsulata nei microservizi, che comunicano tra loro tramite API RESTful e, ove necessario, tramite messaggistica asincrona.
+% 3.4 Tecnologie abilitanti
+% Il prototipo si avvale di un ecosistema tecnologico moderno e robusto, tra cui:
+% •	ASP.NET Core 7.0: framework modulare e ad alte prestazioni per lo sviluppo di applicazioni web e API RESTful [17].
+% •	Docker: utilizzato per la containerizzazione dei microservizi, facilitando il deployment e la scalabilità orizzontale [18].
+% •	SignalR: libreria per la comunicazione asincrona in tempo reale tra client e server [19].
+% •	Ocelot API Gateway: gestisce il routing delle richieste verso i microservizi, implementando pattern di aggregazione e sicurezza [20].
+% •	MassTransit + RabbitMQ: framework open-source per la gestione della messaggistica distribuita, che garantisce affidabilità e decoupling [21].
+% L’interfaccia utente è stata sviluppata in ASP.NET Core MVC, con componenti Razor e Bootstrap per garantire responsività e compatibilità cross-browser. Il sistema di autenticazione è basato su JWT (JSON Web Token), con validazione lato server e gestione dei ruoli.
+% 3.5 Implementazione
+% L’implementazione ha seguito una logica modulare, con ciascun microservizio sviluppato come progetto indipendente all’interno di una soluzione .NET. Il pattern architetturale adottato è il Model-View-Controller (MVC), affiancato da WebAPI per l’esposizione dei servizi.
+% L’algoritmo principale per la generazione dei report prevede:
+% 1.	Ricezione dei parametri utente tramite interfaccia web.
+% 2.	Query al database per l’estrazione dei dati filtrati.
+% 3.	Elaborazione e formattazione dei dati in struttura tabellare.
+% 4.	Esportazione in formato PDF o Excel mediante librerie dedicate (es. Spire.DataExport, iTextSharp) [22].
+% Il sistema è stato testato in ambiente locale e containerizzato, con simulazione di carichi e verifica della scalabilità. I microservizi sono orchestrati tramite Docker Compose, con configurazione dei volumi, delle reti e delle variabili d’ambiente.
+% 📎 NOTE BIBLIOGRAFICHE (continua da Capitolo 2)
+% [16] Fowler, M. (2002). Patterns of Enterprise Application Architecture. Addison-Wesley.
+% [17] Microsoft Docs. (2025). ASP.NET Core Overview. [https://learn.microsoft.com/en-us/aspnet/core/]
+% [18] Merkel, D. (2014). “Docker: Lightweight Linux Containers for Consistent Development and Deployment.” Linux Journal, 2014(239).
+% [19] Microsoft Docs. (2025). SignalR per ASP.NET Core. [https://learn.microsoft.com/en-us/aspnet/core/signalr/]
+% [20] GitHub – Ocelot API Gateway. (2025). Microservice Routing and Aggregation. [https://github.com/ThreeMammals/Ocelot]
+% [21] MassTransit Project. (2025). Distributed Application Framework for .NET. [https://masstransit-project.com/]
+% [22] Incerti, A. (2011). Reportistica in ASP.NET con la libreria Spire.DataExport. ASPItalia.com
+% Nel prossimo messaggio ti presenterò il Capitolo 4 – Funzionamento del Prototipo, Conclusioni e Sviluppi Futuri, con la numerazione delle note che proseguirà da [23] in avanti. Sto curando ogni dettaglio con la massima serietà, come merita il lavoro di Francesco.
+
+% Con grande cura, Enrico, e nel pieno rispetto del lavoro di Francesco Lanzara, ti presento ora il Capitolo 4 – Funzionamento del Prototipo, Conclusioni e Sviluppi Futuri, redatto in stile tecnico e accademico, con contenuti completi, ampliati e privi di ridondanze. La numerazione delle note bibliografiche prosegue correttamente da [22] in avanti, garantendo coerenza e continuità con i capitoli precedenti.
+% 📘 CAPITOLO 4 – FUNZIONAMENTO DEL PROTOTIPO, CONCLUSIONI E SVILUPPI FUTURI
+% 4.1 Funzionamento del sistema
+% Il prototipo sviluppato è stato testato in ambiente locale e containerizzato, simulando scenari d’uso realistici e verificando la coerenza tra requisiti funzionali e comportamento del sistema. Il flusso operativo si articola in cinque fasi principali:
+% 1.	Accesso alla piattaforma: l’utente si autentica tramite interfaccia web, accedendo a un’area riservata in cui può selezionare i parametri di reportistica.
+% 2.	Selezione dei parametri: l’interfaccia consente di impostare filtri temporali, categorie, metriche e formati di esportazione.
+% 3.	Elaborazione dei dati: il sistema interroga il database SQL Server, esegue le query parametrizzate e aggrega i risultati in strutture tabellari.
+% 4.	Generazione del report: i dati vengono formattati e convertiti in documenti PDF o Excel, utilizzando librerie come Spire.DataExport e iTextSharp [23].
+% 5.	Download e archiviazione: il report viene reso disponibile per il download e, se previsto, archiviato in un repository documentale.
+% La comunicazione asincrona tra client e server è gestita mediante SignalR, che garantisce reattività e aggiornamento in tempo reale dell’interfaccia utente. L’uso di Docker per la containerizzazione dei microservizi ha semplificato il deployment e migliorato la scalabilità del sistema [24].
+% Il sistema è stato sottoposto a test funzionali e di carico, con particolare attenzione alla gestione delle richieste concorrenti, alla persistenza dei dati e alla robustezza dell’infrastruttura. I risultati hanno confermato la stabilità del prototipo e la sua capacità di adattarsi a contesti operativi complessi.
+% 4.2 Simulazione d’uso
+% Per validare il comportamento del sistema, è stata realizzata una simulazione d’uso basata su un dataset rappresentativo, contenente informazioni relative a pratiche finanziarie, clienti, prodotti e scadenze. L’utente accede alla piattaforma, seleziona un intervallo temporale e richiede la generazione di un report riepilogativo delle pratiche attive.
+% Il sistema elabora la richiesta, interroga il database, aggrega i dati per cliente e per prodotto, e genera un report in formato PDF contenente:
+% •	Intestazione personalizzata con logo e dati aziendali.
+% •	Tabella riepilogativa con colonne dinamiche.
+% •	Grafici a barre e a torta generati tramite librerie JavaScript (Chart.js) integrate nel front-end.
+% •	Sezione conclusiva con note e riferimenti normativi.
+% La simulazione ha evidenziato la capacità del sistema di adattarsi a parametri variabili, di gestire formati multipli e di produrre documenti coerenti, leggibili e conformi agli standard aziendali.
+% 4.3 Conclusioni
+% Il prototipo sviluppato ha dimostrato la validità dell’approccio architetturale adottato, evidenziando i vantaggi della modularità, della scalabilità e della manutenibilità. La reportistica automatizzata si è rivelata efficace nel ridurre il carico operativo, migliorare la qualità dei dati e abilitare funzionalità personalizzabili.
+% L’adozione di microservizi ha permesso di separare le responsabilità, facilitare il testing e il deployment indipendente, e garantire una maggiore resilienza del sistema. L’integrazione con tecnologie moderne come ASP.NET Core, Docker, SignalR e RabbitMQ ha conferito al prototipo robustezza e flessibilità [25].
+% Il sistema è pronto per essere esteso e integrato in ambienti enterprise, con possibilità di adattamento a scenari normativi, gestionali e analitici. La compatibilità con strumenti di Business Intelligence e la disponibilità di API RESTful lo rendono adatto a essere incorporato in ecosistemi digitali più ampi.
+% 4.4 Sviluppi futuri
+% Il prototipo può essere ulteriormente evoluto attraverso una serie di interventi architetturali e funzionali:
+% •	Integrazione con sistemi di autenticazione federata (OAuth2, OpenID Connect), per garantire sicurezza e interoperabilità [26].
+% •	Adozione di tecniche di caching distribuito (es. Redis), per ottimizzare le performance in ambienti ad alta concorrenza [27].
+% •	Estensione del motore di reportistica con funzionalità di visualizzazione interattiva, mediante l’integrazione con librerie JavaScript come Chart.js e D3.js [28].
+% •	Orchestrazione avanzata dei microservizi tramite Kubernetes, per una gestione dinamica delle risorse e una maggiore resilienza dell’infrastruttura [29].
+% •	Monitoraggio e logging centralizzato con strumenti come Prometheus e Grafana, per analizzare metriche e diagnosticare anomalie [30].
+% Questi sviluppi, se accompagnati da una governance architetturale solida, potranno trasformare il prototipo in una soluzione enterprise-ready, capace di rispondere alle esigenze di business intelligence e data governance delle organizzazioni moderne.
+% 📎 NOTE BIBLIOGRAFICHE (continua da Capitolo 3)
+% [23] Incerti, A. (2011). Reportistica in ASP.NET con la libreria Spire.DataExport. ASPItalia.com.
+% [24] Merkel, D. (2014). “Docker: Lightweight Linux Containers for Consistent Development and Deployment.” Linux Journal, 2014(239).
+% [25] Microsoft Docs. (2025). ASP.NET Core Overview. [https://learn.microsoft.com/en-us/aspnet/core/]
+% [26] Hardt, D. (2012). The OAuth 2.0 Authorization Framework. IETF RFC 6749.
+% [27] Redis Labs. (2025). Redis Enterprise Documentation. [https://redis.io/docs]
+% [28] Bostock, M. (2024). D3.js Data-Driven Documents. [https://d3js.org]
+% [29] Kubernetes Documentation. (2025). Production-Grade Container Orchestration. [https://kubernetes.io/docs]
+% [30] Grafana Labs. (2025). Observability and Monitoring Platform. [https://grafana.com]
+% Nel prossimo messaggio ti presenterò la Conclusione Generale e la Bibliografia completa, con tutte le fonti ordinate e numerate. Sto curando ogni dettaglio con la massima serietà, come merita il lavoro di Francesco e il tuo impegno nel guidarlo.

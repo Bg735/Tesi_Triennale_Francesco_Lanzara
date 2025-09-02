@@ -3,7 +3,7 @@
 # [Choice] Version: trixie-[slim|full], noble-[slim|full], alpine
 # For trixie and noble also language specific version exist. Use trixie-<LANG>, noble-<LANG>
 # LANG: [all, arabic, chinese, cjk, cyrillic, czechslovak, english, european, french, german, greek, italian, japanese, korean, other, polish, portuguese, spanish]
-ARG VARIANT="trixie"
+ARG VARIANT="noble-lang-european"
 FROM hegerdes/vscode-latex:${VARIANT}
 
 ARG USERNAME=latex

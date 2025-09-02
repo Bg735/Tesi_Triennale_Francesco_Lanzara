@@ -1,0 +1,130 @@
+% !TeX root = ../main.tex
+
+%Parametri testuali
+
+
+
+
+
+
+
+
+
+\usepackage{geometry}
+\newlength{\outermargin}
+\setlength{\outermargin}{0.75in} % adjust outer margin here
+\newlength{\innermargin}
+\setlength{\innermargin}{1.5in}
+\geometry{
+	a4paper,
+	twoside,
+	inner=\innermargin,
+	outer=\outermargin,
+	top=25mm,
+	bottom=25mm,
+	headheight=14pt,
+	includehead,
+	includefoot,
+	heightrounded
+}
+\usepackage{listings}
+\lstloadlanguages{C, csh}
+
+\lstset{
+language=csh,
+basicstyle=\footnotesize\ttfamily,
+numbers=left,
+numberstyle=\tiny,
+numbersep=5pt,
+tabsize=2,
+extendedchars=true,
+breaklines=true,
+frame=b,
+stringstyle=\color{blue}\ttfamily,
+showspaces=false,
+showtabs=false,
+xleftmargin=17pt,
+framexleftmargin=17pt,
+framexrightmargin=5pt,
+framexbottommargin=4pt,
+commentstyle=\color{green},
+morecomment=[l]{//}, %use comment-line-style!
+morecomment=[s]{/*}{*/}, %for multiline comments
+showstringspaces=false,
+morekeywords={ abstract, event, new, struct,
+as, explicit, null, switch,
+base, extern, object, this,
+bool, false, operator, throw,
+break, finally, out, true,
+byte, fixed, override, try,
+case, float, params, typeof,
+catch, for, private, uint,
+char, foreach, protected, ulong,
+checked, goto, public, unchecked,
+class, if, readonly, unsafe,
+const, implicit, ref, ushort,
+continue, in, return, using,
+decimal, int, sbyte, virtual,
+default, interface, sealed, volatile,
+delegate, internal, short, void,
+do, is, sizeof, while,
+double, lock, stackalloc,
+else, long, static,
+enum, namespace, string},
+keywordstyle=\color{cyan},
+identifierstyle=\color{red},
+backgroundcolor=\color{white},
+}
+
+
+\usepackage{xcolor}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{cyan},
+  commentstyle=\color{green},
+  stringstyle=\color{orange},
+  showstringspaces=false,
+  breaklines=true
+}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[italian,provide=*]{babel}
+
+\usepackage[T1]{fontenc}
+\usepackage{palatino}
+
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{url}
+\usepackage{acronym}
+\usepackage{tocloft}
+
+\usepackage{mathpazo}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{adjustbox}
+
+%\usepackage{subcaption}
+
+\usepackage{hhline}
+\usepackage{fancyhdr}
+\usepackage{amssymb}
+\usepackage{floatflt}
+\usepackage{setspace}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{array}
+\usepackage{scrhack}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage{lmodern}
+\usepackage{multirow}
+\usepackage{subfig}
+\usepackage{cleveref}
+\usepackage[bottom, hang]{footmisc}

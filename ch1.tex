@@ -1,0 +1,39 @@
+\chapter{Introduzione}
+\section{La reportistica aziendale automatizzata per favorire un modello decisionale data-driven}
+Nel contesto dei \emph{financial services}, la capacità di organizzare i dati e tramutarli in insight strategici è centrale per ottimizzare i processi di enti ed imprese e garantirne il successo.
+La reportistica aziendale, tutt'altro che mera espressione di adempimento burocratico, costituisce una colonna portante dei processi decisionali, fungendo da linfa vitale per la business intelligence, il controllo di gestione e la digitalizzazione integrata dei flussi operativi.
+Attraverso di essa, le organizzazioni non solo attestano la propria performance, ma costruiscono le fondamenta per una governance informata, agile e proattiva.
+Un sistema di reportistica configurabile e avanzato consente alle realtà orientate ai dati di raccogliere e visualizzare indicatori chiave di performance, dati economico-finanziari, operativi e qualitativi, rendere trasparenti le metriche utili al confronto tra reparti o rispetto agli obiettivi strategici, e condividere informazioni in tempi rapidi, anche in mobilità, tramite interfacce dedicate e report compilati automaticamente nei formati più diffusi.
+
+Un prodotto di questa natura, soprattutto se orientato alla facilità di configurazione e  personalizzazione del servizio\footnotemark, consente un approccio computer-aided e data-driven al decision making, per una vasta gamma di utenti anche su piani gerarchici distinti: dagli operatori che necessitano di generare, scaricare e archiviare report sulle proprie attività, ricevendo avvisi tempestivi sull’esito delle elaborazioni; ai dirigenti e manager che impiegano dati aggregati e dashboard evolute per il controllo di gestione, l’analisi degli scostamenti e la pianificazione strategica; fino agli enti e alle aziende che intendono evolvere verso una gestione dei dati moderna, flessibile e basata sui dati, riducendo i tempi di produzione dei report e migliorando contestualmente la qualità delle decisioni.
+
+\footnotetext{A tal fine, risulta imprescindibile segmentare le funzionalità per garantirne la modularità seguendo le esigenze di ciascun profilo utente, da quello operativo a quello dirigenziale. La scelta logica per ottenere questo risultato consiste nella progettazione di un'architettura basata su microservizi, di cui si discuterà in seguito.}
+
+\section{Il caso di studio}
+Nel panorama appena descritto si concretizza l'obiettivo del tirocinio curriculare oggetto di questa trattazione: l’ideazione e la prototipizzazione di un'architettura software modulare e service-oriented, che esponga un servizio preesistente di generazione automatica di report rendendolo \emph{sicuro, scalabile, personalizzabile e facilmente integrabile} con tool di business intelligence o altri software gestionali preesistenti.
+Come verrà approfondito nel capitolo 4, il progetto prevede l'implementazione di un'architettura a microservizi, isolati mediante l'impiego di container \emph{Docker} che garantiscono sia la scalabilità orizzontale sia la migrazione tra ambienti eterogenei.
+Le funzionalità essenziali da implementare si concretizzano nell'utilizzo del motore di reportistica per realizzare un'interfaccia web, che sia accessibile sia mediante RESTful API, affinché il servizio sia agganciabile da altri applicativi per il settore dei financial services (e.g. tool di business intelligence quali PowerBI o Tableau), sia avvalendosi di un'interfaccia utente che renda immediati e intuitivi la generazione e la condivisione dei report, esportabili in formati diffusi quali Excel (.xlsm) e PDF.
+Caratteristiche aggiuntive, come l'orchestrazione con \emph{\textbf{Docker Compose}}, l'introduzione \textbf{update asincroni} dell'interfaccia, l'implementazione di un sistema di \textbf{autenticazione} robusto e centralizzato, e l'utilizzo di un \textbf{gateway API} come intermediario tra client e microservizi completano il quadro di una soluzione moderna, scalabile e sicura.
+
+\section{Tecnologie abilitanti}
+Il framework adottato per la realizzazione dei servizi è \emph{Microsoft ASP.NET Core}, che consente di sviluppare applicazioni web e API in modo rapido ed efficiente, sfruttando le potenzialità del linguaggio C\# e dell'ecosistema \emph{.NET}.
+Nello specifico, per la configurazione del container incaricato di esporre l'API RESTful si usufruisce del modello \textbf{ASP.NET Core Web API}, che rende agile e intuitiva la configurazione degli endpoint e la manutenzione della logica dell'API (documentazione dell'API esposta mediante il servizio \textbf{Swagger}); l'applicativo web con interfaccia è stato realizzato secondo il modello \textbf{ASP.NET Core MVC}, utile per realizzare applicativi tradizionali\footnotemark, separando distintamente la logica di presentazione dalla logica di business, e facilitando lo sviluppo e la manutenzione dell'interfaccia utente. All'interfaccia utente sono poi aggiunte feature dinamiche mediante la tecnologia \textbf{SignlR}, che consente l'invio di notifiche asincrone mantenendo comunicazioni in bilaterali real-time tra client e server.
+
+Per quanto concerne la struttura organizzativa dell'applicativo, annoveriamo altre feature che forniscono al progetto un'architettura del tutto simile un approccio a microservizi: la soluzione è basata su container indipendenti, orchestrati mediante \textbf{Docker Compose}; un container dedicato centralizza la gestione dell'autenticazione usufruendo di \textbf{Duende Identity Server}, \textbf{EntityFramework Core} e \textbf{ASP.NET Core Identity e Authentication}. L'adozione di un gateway API per un reverse proxying potente e facilmente configurabile con \textbf{YARP}, per la gestione delle richieste e l'applicazione di policy di sicurezza, garantendo non solo modularità e manutenibilità evolute nel tempo, ma una navigazione tra i vari servizi fluida, eliminando la necessità di autenticazioni multiple nell'accedere a servizi distinti del sistema, la cui separazione interna non dovrebbe influire sull'esperienza dell'utente.
+
+In definitiva, la soluzione proposta non solo è tecnicamente adeguata ai requisiti richiesti da organizzazioni data-intensive, ma si collocherebbe con piena efficacia in scenari reali, promuovendo usabilità, integrabilità ed evolvibilità. Essa incarna il passaggio dalla reportistica statica e reattiva a un ecosistema dinamico, interconnesso e capace di generare valore continuo, trasformando i dati nel più prezioso alleato per il governo dell’impresa.
+
+\section{Struttura della tesi}
+Il seguito della trattazione si articolerà nelle sezioni seguenti:
+
+\begin{enumerate}
+	\item \textbf{Contesto applicativo}, con cenni al settore dei \emph{financial services} e alle esigenze di digitalizzazione e automazione dei processi decisionali che ne caratterizzano l'evoluzione.
+	\item \textbf{Accenni alle architetture distribuite orientate ai microservizi} e descrizione di concetti e principi propri degli applicativi \textbf{software web-based} impiegati contestualmente alla soluzione prodotta.
+	\item \textbf{Panoramica sugli strumenti tecnologici} impiegati, con particolare riferimento alla suite \emph{ASP.NET Core}, framework centrale per la realizzazione della soluzione in esame.
+	\item \textbf{Analisi del caso di studio}, con illustrazione della struttura progettuale, delle scelte implementative e delle prospettive di evoluzione verso scenari di deployment distribuito e multicanale.
+	\item \textbf{Conclusione}
+\end{enumerate}
+
+\footnotetext{
+    Per "\emph{tradizionali}" si intende applicazioni multi-pagina (\emph{MPA}) con rendering server-side, una delle filosofie originarie per la realizzazione di applicativi web. Nei capitoli successivi si argomenterà la scelta dell'utilizzo di tale modello rispetto a soluzioni meno mature, e.g. lo sviluppo di applicazioni singola-pagina (\emph{SPA}) con tecnologia \emph{Blazor}, sempre della suite ASP.NET.
+}

@@ -6,7 +6,7 @@
 		"dockerfile": "Dockerfile",
 		// Update 'VARIANT' to pick an Debian version: bookworm, trixie, noble, jammy
 		"args": {
-			"VARIANT": "trixie",
+			"VARIANT": "noble-lang-european",
 			"USERNAME": "latex"
 		}
 	},

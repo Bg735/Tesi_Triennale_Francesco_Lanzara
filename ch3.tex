@@ -1,0 +1,169 @@
+\chapter{Architetture a microservizi e servizi web evoluti}
+\section{I limiti delle architetture monolitiche}
+Le architetture a microservizi si propongono di estirpare alla radice problemi e limiti delle architetture monolitiche, che nel contesto dei sistemi distribuiti rappresentano la soluzione intuitiva e tradizionale. In questa sezione, daremo un breve sguardo alle difficoltà che emergono con l'approccio monolitico, per poi introdurre il concetto di microservizi e come questi affrontino tali sfide.
+Un applicativo si definisce \emph{monolitico} quando:
+
+\begin{itemize}
+    \item Un' unica codebase racchiude l'intera logica di business, che è al più suddivisa in moduli. Molti team di sviluppatori con competenze disparate devono collaborare su un unico progetto, integrare grandi quantità di modifiche dipendenti da più moduli e dispiegarle contemporaneamente sui server di produzione;
+    \item Ogni modulo elabora l'interità della logica per il dominio a cui appartiene, e il suo \emph{lifecycle}, ossia l'estensione nel tempo dei periodi di attività e stallo del servizio, è dipendente da ogni altro modulo: se un modulo va "down" (per manutenzione o guasto), l'intero applicativo deve smettere di funzionare;
+    \item I dati di tutti i domini sono gestiti in un unico database centralizzato, accessibile da ogni modulo. Questo è spesso un voluminoso database relazionale che consente di utilizzare facilmente \emph{join} per operazioni inter-modulari, ma può altrettanto facilmente diventare un collo di bottiglia per le performance e la scalabilità dell'applicativo.
+    \item L'applicativo è distribuito come un unico eseguibile, quindi il carico di lavoro assegnabile ad ogni modulo è standardizzato per ogni singola istanza di esecuzione.
+    Ipotizziamo un applicativo con moduli \textbf{A}, \textbf{B} e \textbf{C}, in cui le richieste al solo modulo \textbf{A} superano la sua capacità elaborativa. Per far fronte al problema, sarebbe necessario avviare una seconda istanza dell'applicativo, compresa di moduli \textbf{B} e \textbf{C} (non saturi), causando una dispersione evidente di risorse computazionali e di memoria.
+\end{itemize}
+Per quanto possa sembrare più \emph{semplice} e \emph{intuitivo} iniziare un progetto come soluzione monolitica, i bassi livelli di scalabilità ed evolvibilità della soluzione rendono facile comprendere l'adozione progressivamente maggiore di un approccio basato su microservizi per la progettazione di software distribuiti agili.
+
+\section{I microservizi: ultima frontiera dei sistemi distribuiti}
+Il concetto di architettura a microservizi non nasce come una realtà isolata, ma si colloca nel contesto delle \emph{Service Oriented Architecture}s (\textbf{SOA}). Questo termine, che nel tempo ha assunto connotazioni diverse per persone diverse, può essere definito a grandi linee come la pratica di decomporre un'applicazione in più servizi rappresentanti sottosistemi logicamente indipendenti, in una separazione orizzontale (componenti di uguale importanza ma che trattano aspetti diversi della logica di business) o verticale (divisione della logica in tier gerarchici).
+Tuttavia, le architetture a microservizi si distanziano dalle best practices delle SOA, che spesso sono invece considerati anti-pattern per un sistema a microservizi; alcuni esponenti sostengono infatti come i microservizi siano "\emph{Se i SOA fossero ben fatti}" \cite[25]{.NET_Microservices}.
+
+Più in generale, i microservizi specializzano il concetto più generico di SOA, introducendo tecniche e requisiti più restrittivi e che mirano a ottenere un risultato specifico: quello di definire un applicativo sulla base di servizi della dimensione minima necessaria ad operare su un contesto ben delineato e con un basso accoppiamento tra di essi, favorendo un deploy indipendente e una forte scalabilità orizzontale. In sostanza, i microservizi "\emph{forniscono agilità a lungo termine}" \cite[25]{.NET_Microservices}.
+
+Per chiarire i problemi che un'architettura a microservizi si propone di risolvere, in opposizione al tradizionale approccio monolitico (in cui un unico eseguibile racchiude interamente la logica di business), ritengo utile elencare alcune delle caratteristiche principali di questo paradigma architetturale.
+
+\subsection{Incapsulamento e indipendenza}
+I microservizi sono ideati per essere autonomi e indipendenti, così da poter essere sviluppati, testati e distribuiti in maniera isolata. Ogni microservizio mantiene i propri runtime e dipendenze isolati dall'host su cui è eseguito, riducendo al minimo indispensabile le interazioni con altri servizi: questo approccio consente una maggiore flessibilità e agilità nello sviluppo e nella distribuzione delle applicazioni. Il ciclo di vita di un microservizio diventa così indipendente da quello degli altri elementi dell'ecosistema con cui interagisce.
+
+Una conseguenza della separazione concettuale del singolo microservizio dall'architettura complessiva è che anche il modello concettuale diventa specifico e indipendente. In un'applicazione monolitica, il \emph{modello} di ogni dominio è sovrapposto agli altri: come risultato, spesso si lavora con singole entità che ricoprono ruoli diversi nel contesto di servizi differenti, generando ambiguità semantica e confusione nella gestione di database centralizzati, lo standard in un approccio monolitico.
+Viceversa, in un'architettura a microservizi, ogni microservizio ricopre esattamente un dominio indipendente (in maniera non dissimile dai \emph{bounded context} in \emph{Domain-Driven Design}): in questo modo, può definire un \emph{modello concettuale} dalla struttura snella, efficiente e context-coherent, e gestire un eventuale \emph{state} su database per-service che riflettano tale struttura.
+Tale soluzione presenta evidenti benefici: modificare l'implementazione (lo schema o addirittura il DBMS) non impatterà gli altri servizi che accedono ai dati, mentre la creazione di un singolo punto di accesso ai dati riduce la possibilità di incoerenza nei dati e aiuta a prevenire e individuare bug.
+La separazione in database distinti consente inoltre di scegliere, per ogni contesto, \emph{tipi} diversi di database, magari coniugando soluzioni SQL e NoSQL: tale approccio è detto \emph{persistenza poliglotta}\cite[29]{.NET_Microservices}.
+
+In sintesi, l'incapsulamento di logica e dati di un microservizio consente di sviluppare e aggiornare il servizio in maniera indipendente, restringendo la coordinazione con team assegnati ad altri domini alla sola progettazione delle API pubbliche.
+
+\subsection{Smart Endpoints e Dumb Pipes per una comunicazione scalabile}
+Spesso il design di SOA di software complessi si riduce a un collage di monoliti, la cui logica di comunicazione viene centralizzata mediante infrastrutture software (i cosiddetti \emph{service bus}). Tale pratica comune ha come ineluttabile conseguenza quella di accoppiare i servizi con l'infrastruttura, riducendo drasticamente l'indipendenza dei team di sviluppo che si ritrovano a far defluire parte della logica nella "terra di mezzo" del middleware di comunicazione, pronta alla "contaminazione" da parte di altri domini.
+In opposizione a questa pratica, i microservizi adottano una filosofia di comunicazione \emph{smart endpoints, dumb pipes}\cite[19]{Thesis_microservices}, abolendo l'uso di di middleware complesso e preferendo invece sistemi di comunicazione leggeri e \emph{data-agnostic}: l'unico scopo dell'infrastruttura è recapitare i messaggi agli endpoint, evitando \emph{leak} del contenuto informativo e della logica di business al di fuori dei microservizi ai capi della trasmissione.
+
+Le tipologie di comunicazione adottate nel contesto di un'architettura a microservizi si scandiscono in base a due criteri di selezione\cite[19]{Thesis_microservices}:
+\begin{itemize}
+    \item Comunicazione sincrona o asincrona: determina rispettivamente se il mittente attende una risposta dal destinatario prima di proseguire l'elaborazione, o se può continuare a operare indipendentemente dalla ricezione del messaggio. Una soluzione sincrona diffusa è l'utilizzo del protocollo \textbf{HTTP} per esporre \textbf{API RESTful}, garantendo una comunicazione chiara e \emph{stateless}. Vari pattern di messaggistica asincrona sono invece implementabili mediante il protocollo \textbf{AMQP};
+    \item Comunicazione single-receiver o multi-receiver: stabilisce se il messaggio viene inviata a un singolo interlocutore (il fornitore del servizio richiesto) o in generale a più destinatari (tipici di questa categoria sono protocolli di tipo \emph{publish/subscribe}, fondamentali nella progettazione di sistemi event-driven).
+\end{itemize}
+
+\section{I trade-off della suddivisione in microservizi}
+Nelle ultime pagine abbiamo esplorato alcuni problemi delle architetture monolitiche/SOA e come i microservizi si propongono di risolverli. Tuttavia, la scelta di separare un sistema software unico in applicativi indipendenti introduce alcune complicazioni, prevalentemente legate alla necessità di coordinare operazioni su più microservizi, richiedendo uno scambio di informazioni che sarebbe invece triviale tra moduli dello stesso processo.
+Discutiamo brevemente in questa sezione le due colonne portanti del layer di complessità aggiunta dall'introduzione dei microservizi.
+
+\subsection{Resilienza distribuita delle operazioni}
+In sistemi monolitici, invocare un'operazione su un'entità dello stesso processo è banale, grazie a funzionalità integrate nei linguaggi di programmazione e nei framework consolidati che consentono una gestione generalmente intuitiva del \emph{control flow}.
+Invece, in un'architettura a microservizi distribuita (e magari orchestrata), una richiesta potrebbe essere smistata sullo stesso host come in un altro server a distanza variabile, introducendo una latenza non stimabile a priori e in generale la possibilità di estendere la comunicazione a una rete inaffidabile.
+
+Se un applicativo monolitico può introdurre facilmente indicatori di progresso e lanciare eccezioni o errori in caso di fallimento di un'operazione, l'apertura dei microservizi a una comunicazione sincrona in rete fa sì che, finché non riceve una risposta, a un mittente non è dato sapere se l'operazione sia in corso, sia fallita e nemmeno se la richiesta sia arrivata al destinatario.
+
+Una soluzione comune è l'introduzione di un timeout, che consente al mittente di interrompere l'attesa di una risposta e gestire il fallimento dell'operazione in modo efficace.
+A tale soluzione si aggiungono solitamente alcune "strategie"\cite{Thesis_microservices} che consentono di reagire dinamicamente allo stato della rete per limitare i disagi causati da fallimenti "localizzati" delle richieste.
+Tra queste strategie si annoverano: \textbf{(i)} \textbf{Retry con Backoff esponenziale e Jitter}: Quando una chiamata fallisce, il \emph{caller} ritenta la chiamata (con un limite di tentativi).
+Per non sovraccaricare il \emph{callee}, i \emph{retry} sono ritardati con andamento esponenziale, su cui è introdotto un \emph{jitter}, cioè una deviazione dal tempo calcolato per evitare di inondare il \emph{callee} di richieste contemporanee. (\textbf{ii}) \textbf{Circuit Breaker}: le richieste a un microservizio fornitore falliscono automaticamente dopo un numero prestabilito di fallimenti. Lo scopo è quello di evitare attese che con ogni probabilità precedono un timeout. (\textbf{iii}) \textbf{Bulkhead}: Le risorse per l'accesso concorrente sono suddivise per dipendenza, così che un \emph{callee} guasto saturi solo una porzione dei worker asincroni. (\textbf{iiii}) \textbf{Fallback/Caching} In applicazioni in cui ricevere l'ultima versione dei dati non sempre è cruciale, è possibile introdurre strutture che forniscano risultati alternativi o meno recenti in caso di fallimento della chiamata.
+
+\subsection{Integrità distribuita dei dati}
+Pur assumendo una comunicazione infallibile tra microservizi, i meccanismi forniti dai DBMS per garantire l'integrità dei dati, prime tra tutti le \textbf{transazioni}, sono indissolubilmente connessi al concetto di operazioni sui dati come elaborazioni compatte e indipendenti, il cui esito non può essere certamente determinato in un processo multi-step su una rete inaffidabile.
+Con il termine \emph{transazione} ci si riferisce ad una sequenza di operazioni effettuate su una base dati che garantisce il rispetto delle proprietà ACID:
+\begin{itemize}
+    \item Atomicity: le operazioni eseguite sono indivisibili: il risultato della transazione viene applicato (\emph{commit}) solo se tutte le operazioni che la compongono hanno avuto successo, altrimenti i loro effetti sono annullati (\emph{rollback});
+    \item Consistency: iniziando in uno stato coerente dei dati, una transazione può solo terminare nello stato precedente o un nuovo stato coerente.
+    \item Isolation: ogni transazione non deve interferire con altre transazioni in esecuzione.
+    \item Durability: alla fine di una transazione le modifiche sono salvate in maniera persistente, puntando a garantire l'integrità dei dati anche in caso di guasti o danni fisici al sistema.
+\end{itemize}
+
+In un contesto distribuito, non è semplice garantire le proprietà \emph{ACID} di transazioni multi-servizio, poiché ognuno di essi gestisce i propri dati in maniera autonoma e le comunicazioni tra di essi possono fallire o essere ritardate. E' necessario introdurre meccanismi di \emph{error safety} per garantire che, in caso di fallimento di una parte del sistema, l'integrità dei dati sia preservata e le operazioni possano essere ripristinate ad uno stato coerente.
+La soluzione è una "sovrastruttura" che diriga le transazioni per garantire uno stato coerente dei dati: si introduce così il concetto di \emph{saga}.
+
+\subsubsection{Le saghe per dirigere le transazioni distribuite}
+L'obiettivo del pattern \emph{saga} è quello di garantire la consistenza logica tra i database di più servizi, in linea con il principio di \emph{eventual consistency} (coerenza finale eventuale) proprio della programmazione distribuita: ogni operazione che coinvolga l'update di più database \emph{prima o poi} deve terminare garantendo uno stato coerente.
+
+Nel concreto, come spiegato nelle guide Microsoft\cite{Microsoft_Saga_Pattern}, una saga consiste in una sequenza di transazioni locali, in cui ogni (micro)servizio esegue l’operazione e avvia il passaggio successivo tramite eventi o messaggi (in alcuni casi, lo stato della saga può essere dedotto dal contesto, come nel caso di timeout nell'attesa di una transazione). Ogni transazione locale esegue il proprio \emph{commit} e con una notifica richiede l'inizio della fase successiva. Se uno dei passaggi fallisce, la saga prevede l'esecuzione di transazioni compensative per invertire le modifiche apportate agli step precedenti.
+I due approcci principali per coordinare le saghe sono \emph{coreografia} e \emph{orchestrazione}, tuttavia l'uso dell'orchestrazione è scoraggiato per coerenza con il principio di decentralizzazione proposto con la filosofia \emph{smart endpoints, dumb pipes}.
+
+L'orchestrazione prevede un componente centrale (\emph{orchestrator}) che riceve gli eventi di avvio della saga e invia ordini ai servizi coinvolti. Tale soluzione evita dipendenze cicliche tra servizi e semplifica la logica di rollback complessivo, tuttavia l'orchestratore costituisce un \emph{single point of failure}, non sempre scala bene, e l'approccio iterativo del flusso di controllo (opposto a quello ricorsivo della coreografia) aumenta il carico di messaggistica (comando/risposta per ogni nodo).
+
+La coreografia affida ai servizi coinvolti il compito di gestire autonomamente la logica della saga, reagendo agli eventi generati dagli altri servizi. I principali svantaggi di questo approccio sono la difficoltà di tracciare lo stato della saga (nessun nodo mantiene lo stato dell'intera operazione, ma solo le informazioni sul suo ruolo) e una maggiore complessità nel coordinare le transazioni compensative in caso di fallimento.
+
+Nel complesso, il modello di consistenza offerto dalle saghe passa da avere proprietà ACID (pur valido per le transazioni locali), a proprietà BASE:
+\begin{itemize}
+    \item Basic Availability: il fatto che ci sia una saga in corso non impedisce a un'altra richiesta di dare inizio a un'altra saga;
+    \item Soft state: anche in assenza di nuove richieste esterne, lo stato dei dati potrebbe variare finché tutte le saghe concorrenti non sono terminate;
+    \item Eventual consistency: al termine di tutte le saghe concorrenti, i dati saranno in uno stato coerente e letture successive garantiranno gli stessi risultati.
+\end{itemize}
+
+\section{L'importanza dei container per le architetture a microservizi}
+Potremmo pensare ai microservizi come "pacchetti" preconfezionati di software appartenente a un certo dominio, e ciò ne descriverebbe intuitivamente i vantaggi. Tuttavia, quest'astrazione nasconde una serie di problemi che sono invece cruciali, soprattutto per la distribuzione di applicativi in ambienti server e non solo in architetture a microservizi.
+Tali problemi riguardano principalmente l'isolamento, la flessibilità di configurazione e la portabilità delle soluzioni software.Basti pensare al comicamente noto problema del "sul mio computer funziona": un codice teoricamente corretto e funzionante potrebbe risultare inutilizzabile quando esportato su un nuovo calcolatore.
+Conflitti con variabili d'ambiente, chiavi di registro o altri elementi del file system; problemi di autorizzazione; assenza o errata configurazione o versione delle dipendenze. Queste sono solo alcune delle innumerevoli e frustranti problematiche che derivano dalla vicendevole contaminazione dell'ambiente in cui gli applicativi software vengono eseguiti.
+
+C'è di più: finora abbiamo ignorato il \emph{come} l'applicativo debba essere esportato su altri calcolatori: anche questa fase costituisce una fonte inesauribile di frustrazioni aleatorie, legate alle differenze tra le architetture dei processori, dei sistemi operativi, del supporto di date funzionalità. Più in generale, sarebbe ideale poter installare l'applicativo come uno \emph{standalone} compreso delle dipendenze necessarie e isolato rispetto allo stato del sistema che lo esegue così da evitare problemi di configurazione. Ci si auspica inoltre di poter mettere facilmente a disposizione l'applicativo su Internet (così da non dover caricare manualmente una versione eseguibile dell'applicativo su ogni server), magari in più versioni e potendo configurare eventuali variabili system-specific del software in maniera semplice e integrata all'avvio.
+
+Tutto questo e di più è possibile all'introduzione di un unico potente concetto: \textbf{i container}, strutture virtuali che consentono di confezionare le applicazioni come pacchetti pronti all'uso.
+Costituendo lo standard di fatto per la containerizzazione delle applicazioni, nel prosieguo della trattazione mi riferirò specificatamente all'uso dell'ecosistema \emph{Docker} per descrivere le potenzialità di questa tecnologia.
+
+\subsection{Che cos'è un container?}
+Un container è un processo autonomo che include tutto e solo il necessario per eseguire un'applicazione: codice/eseguibili, runtime, dipendenze e variabili d'ambiente. Quando un ambiente software è confezionato in un container, tutto il necessario alla sua corretta esecuzione è mantenuto in uno spazio utente isolato nel sistema operativo host (quello su cui è eseguito), evitando conflitti con altri applicativi e servizi e garantendo che l'applicazione funzioni sempre come previsto, indipendentemente dall'ambiente di esecuzione.
+Tali proprietà fanno sì che la containerizzazione sia l'approccio ideale per distribuire facilmente applicazioni software in ambienti distribuiti, in cui l'avvio di un'istanza di software può essere determinato in modo dinamico e automatico da sistemi di orchestrazione: diventa imprescindibile essere in grado di dispiegare più applicativi (anche di più istanze dello stesso) su dispositivi eterogenei e \emph{on the fly}, senza che un eventuale sistema di orchestrazione debba tenere conto di possibili conflitti. Con l'adozione dei container, i server dalle architetture più disparate possono essere considerati come risorse omogenee, delle griglie di "slot per container".
+
+L'unico requisito affinché un server possa usufruire di questa feature "\emph{Build Once, Deploy Everywhere}" è l'installazione di un \emph{Docker Engine}, una piattaforma che contiene:
+\begin{itemize}
+    \item Docker Daemon (\texttt{dockerd}), servizio che gestisce i container e le altre entità legate al mondo Docker;
+    \item Docker API, che consente di interagire con il Daemon tramite richieste REST;
+    \item Docker CLI, interfaccia a riga di comando che consente di interagire con il Daemon tramite comandi testuali.
+\end{itemize}
+
+\subsubsection{Container contro Virtual Machine}
+Non è raro che qualcuno paragoni e confonda il concetto di Container con quello di Virtual Machine, in virtù del fatto che ogni container possiede un proprio spazio utente, con variabili d'ambiente, file system e tool di sistema diversi. In realtà, ogni container \emph{crede} di gestire un proprio sistema operativo, ma la realtà è più complessa di così.
+Le macchine virtuali (VM) sono ambienti di esecuzione completi, con un sistema operativo proprio il cui kernel può differire da quello della macchina host grazie a una mappatura tra il sistema virtuale e quello reale.
+
+Al contrario, i container condividono il kernel dell'host (o una VM fornita dall'host, come accade per i container Linux su Windows/MacOS), creando una copia personale solo dello spazio utente che spesso è minimale per garantire agilità nell'operare con essi. Essendo eseguiti direttamente sul sistema host, i container sono notevolmente più leggeri delle VM, somigliando più a dei "processi imbottiti" che a degli ambienti di esecuzione a sé stanti.
+
+\subsection{Ciclo di vita di un container}
+Come si fa a distribuire un'applicazione come container?
+In realtà, il container in sé rappresenta la singola istanza di un ambiente isolato di esecuzione, mentre l'artefatto che viene distribuito per consentire la creazione di container è detto \emph{immagine}. Per spiegare intuitivamente la relazione tra immagini e container, riassumiamo il flusso da applicazione software a container.
+
+\begin{itemize}
+    \item Sviluppo dell'applicazione: il codice sorgente dell'applicazione viene realizzato e testato in un ambiente di sviluppo.
+    \item Scrittura del Dockerfile: in base della configurazione desiderata, si compone un file di testo, chiamato \emph{Dockerfile} (privo di estensione), che contiene le informazioni necessarie per costruire l'immagine del container. Tra le altre cose, è obbligatorio specificare la base, un'immagine di partenza a cui aggiungere l'applicativo sviluppato, oltre a dipendenze, variabili e altre configurazioni. Una base può contenere una versione minimale di uno spazio utente, o prevedere delle componenti aggiuntive ottimizzate e pre-installate, come i runtime necessari per l'applicazione. Le immagini di base possono essere caricate dal file system locale o scaricate a \emph{build time} da un registro di immagini online(come Docker Hub).
+    \item Build dell'immagine: a partire dal codice sorgente dell'applicazione e dal Dockerfile, viene generata l'immagine, che rappresenta l'insieme spazio utente + applicazione come definito dalle istruzioni del Dockerfile.
+    \item Distribuzione dell'immagine: l'immagine viene caricata su un registro di immagini (pubblico o privato) da cui può essere scaricata per creare nuovi container.
+    \item Esecuzione del container: scaricando un'immagine, è possibile creare un nuovo container come "istanza" di essa, eventualmente configurabile con variabili e parametri contestuali tramite Docker CLI.
+\end{itemize}
+
+\subsection{Persistenza e connettività dei container}
+La piattaforma Docker non si limita a gestire ambienti di esecuzione, ma offre anche varie funzionalità per consentire ai container di salvare i dati in modo persistente e di comunicare tra loro, con altri processi e con l'esterno.
+
+\subsubsection{Gestione dei dati}
+Il file system di un container Docker è effimero per definizione: quando il container viene eliminato, anche i dati al suo interno vanno perduti. Per questo motivo, Docker offre alcune alternative per preservare i dati sull'host.
+
+Il \textbf{Bind mount} consiste nel mappare una cartella del filesystem dell'host su una cartella del container: in questo modo, i dati permangono anche con l'eliminazione del container. Questa soluzione porta un evidente svantaggio di portabilità, in quanto bisogna garantire che il ramo specificato sia sempre presente sull'host su cui viene eseguito il container: ciò causa problemi per path relativi e interventi inattesi sul ramo da parte dell'host.
+
+Un \textbf{Named Volume} è uno storage dedicato sull'host e gestito da Docker indipendentemente da esso. Questa soluzione offre una maggiore portabilità ed è più automatica; per contro, accedere allo storage dall'host è meno intuitivo che navigare verso una cartella nota a priori (come per un bind mount).
+
+Una soluzione non realmente persistente, ma utile in alcuni scenari, è il \textbf{tmpfs mount}, che consente di mappare una porzione di memoria RAM dell'host su una cartella del container. I dati memorizzati in un tmpfs mount sono volatili, ma l'accesso è molto più veloce rispetto a un volume su disco.
+
+\subsubsection{Connettività in rete}
+Nonostante il pregio principale dei container Docker sia il loro isolamento, ciò non significa che non dovrebbero poter comunicare tra loro e con l'esterno. Esistono due modi integrati in Docker per fornire connettività ai container.
+
+Una rete \texttt{bridge} è una rete virtuale privata che consente ai container connessi di comunicare tra loro grazie ad alias e un DNS interno. La comunicazione in uscita con l'esterno è consentita di default in quanto un bridge fa NAT (\emph{Network Address Translation}) verso l'host, mentre per abilitare una comunicazione bidirezionale è necessario utilizzare il meccanismo di \emph{port forwarding} fornito da Docker, al fine di mappare porte dei container a porte dell'host.
+
+Una rete \texttt{host} invece consente ai container connessi di condividere lo stesso stack di rete dell'host, il che significa che possono comunicare tra loro e con l'esterno utilizzando l'IP dell'host stesso. Questa soluzione garantisce performance elevate per la comunicazione con l'esterno, ma sacrifica l'isolamento di rete tra i container e l'host.
+
+È possibile inoltre definire delle reti personalizzate, di tipo \texttt{bridge} per personalizzare quali container possono comunicare tra loro, oppure con una configurazione \texttt{macvlan} che consente a ogni container di ottenere un indirizzo MAC virtuale e un indirizzo IP dedicato su una rete LAN. L'introduzione di sistemi di orchestrazione come \emph{Docker Swarm} consente di definire anche reti cosiddette \texttt{overlay}, che consentono a container su host diversi di comunicare tra loro attraverso una rete virtuale distribuita.
+
+\subsection{Coordinare container multipli: da Docker Compose all'orchestrazione}
+Come spesso succede con le interfacce testuali potenti, i comandi Docker CLI rischiano di essere verbosi e poco chiari all'aumentare del numero di container da gestire. Fortunatamente, lo stesso ecosistema Docker risolve il problema fornendo metodi per dirigere un numero maggiore di container mediante l'automatizzazione della composizione di comandi Docker CLI che sarebbero altrimenti complessi e ripetitivi.
+Il tool che racchiude tali metodi è \texttt{Docker Compose}, un livello di astrazione sopra Docker che consente di coordinare uno stack di container correlati mediante una sintassi dichiarativa semplice su file \emph{YAML} (\texttt{docker-compose.yml}).
+
+Tuttavia, quando si tratta di gestire container in produzione, è necessario adottare approcci più avanzati e scalabili, che consentano di coordinare un numero variabile di container su architetture distribuite. Gli strumenti che consentono tali operazioni sono detti \emph{orchestratori}.
+
+Come spiegato chiaramente sul sito di \emph{Red Hat}: "L'orchestrazione dei container è il processo che permette di automatizzare il deployment, la gestione, la scalabilità e il networking dei container attraverso l'intero ciclo di vita, consentendo di distribuire il software in modo uniforme in molto ambienti diversi e su larga scala." \cite{RedHat_Orchestration}
+
+Senza entrare nel dettaglio, un \emph{orchestrator} si occupa di avviare, fermare, monitorare e replicare i container su diversi nodi di un cluster, garantendo alta disponibilità, bilanciamento del carico, gestione dei guasti e aggiornamenti senza interruzione del servizio. Gli orchestratori come \emph{Kubernetes}, \emph{Docker Swarm} e \emph{Apache Mesos} permettono di coordinare in modo efficiente l'esecuzione di applicazioni composte da sciami di microservizi, semplificando la gestione operativa e migliorando la resilienza dei sistemi distribuiti.
+I sistemi di orchestrazione sono centrali in contesti che adottano le filosofie DevOps e CI/CD (Continuous Integration/Continuous Deployment), in quanto consentono di automatizzare il rilascio di nuove versioni del software e la gestione delle infrastrutture in maniera efficiente e affidabile.
+
+\subsection{Microservizi su container: un connubio spontaneo}
+
+
+
+%API Gateway
+
+%Come identificare i microservizi? Bounded Context
+
+%    Tradizionalmente, le applicazioni web prevedono la navigazione dell'utente in più pagine web, spesso generate dinamicamente dal server: tale è la filosofia su cui si incentra il modello ASP.NET Core MVC.
+%     Con il passare degli anni, tuttavia, si è assistito a un'evoluzione verso approcci più moderni, come l'adozione di architetture a singola pagina (SPA) e l'utilizzo di framework JavaScript per la gestione della logica di interfaccia utente (e.g. React, Angular, Vue), che hanno reso possibile esperienze di navigazione più fluide, modulari e reattive, a scapito di complessità, manutenibilità, retrocompatibilità e performance.
+%     Nel nostro caso di studio, la preferenza per un applicativo facilmente manutenibile, aggiornabile e accessibile da qualunque dispositivo ha guidato la scelta di adottare una soluzione di tipo \emph{Multi-Page-Application} (filosofia di ASP.NET Core MVC), piuttosto all'alternativa \emph{Single-Page-Application} che il framework supporta grazie alla tecnologia \emph{Blazor}.
