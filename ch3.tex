@@ -42,7 +42,7 @@ Le tipologie di comunicazione adottate nel contesto di un'architettura a microse
 
 \section{I trade-off della suddivisione in microservizi}
 Nelle ultime pagine abbiamo esplorato alcuni problemi delle architetture monolitiche/SOA e come i microservizi si propongono di risolverli. Tuttavia, la scelta di separare un sistema software unico in applicativi indipendenti introduce alcune complicazioni, prevalentemente legate alla necessità di coordinare operazioni su più microservizi, richiedendo uno scambio di informazioni che sarebbe invece triviale tra moduli dello stesso processo.
-Discutiamo brevemente in questa sezione le due colonne portanti del layer di complessità aggiunta dall'introduzione dei microservizi.
+Discutiamo brevemente in questa sezione le colonne portanti del layer di complessità derivato dall'introduzione dei microservizi.
 
 \subsection{Resilienza distribuita delle operazioni}
 In sistemi monolitici, invocare un'operazione su un'entità dello stesso processo è banale, grazie a funzionalità integrate nei linguaggi di programmazione e nei framework consolidati che consentono una gestione generalmente intuitiva del \emph{control flow}.
@@ -84,6 +84,9 @@ Nel complesso, il modello di consistenza offerto dalle saghe passa da avere prop
     \item Soft state: anche in assenza di nuove richieste esterne, lo stato dei dati potrebbe variare finché tutte le saghe concorrenti non sono terminate;
     \item Eventual consistency: al termine di tutte le saghe concorrenti, i dati saranno in uno stato coerente e letture successive garantiranno gli stessi risultati.
 \end{itemize}
+
+\subsection{Disacoppiare client e microservizi: i Gateway API}
+
 
 \section{L'importanza dei container per le architetture a microservizi}
 Potremmo pensare ai microservizi come "pacchetti" preconfezionati di software appartenente a un certo dominio, e ciò ne descriverebbe intuitivamente i vantaggi. Tuttavia, quest'astrazione nasconde una serie di problemi che sono invece cruciali, soprattutto per la distribuzione di applicativi in ambienti server e non solo in architetture a microservizi.
@@ -153,8 +156,8 @@ Tuttavia, quando si tratta di gestire container in produzione, è necessario ado
 
 Come spiegato chiaramente sul sito di \emph{Red Hat}: "L'orchestrazione dei container è il processo che permette di automatizzare il deployment, la gestione, la scalabilità e il networking dei container attraverso l'intero ciclo di vita, consentendo di distribuire il software in modo uniforme in molto ambienti diversi e su larga scala." \cite{RedHat_Orchestration}
 
-Senza entrare nel dettaglio, un \emph{orchestrator} si occupa di avviare, fermare, monitorare e replicare i container su diversi nodi di un cluster, garantendo alta disponibilità, bilanciamento del carico, gestione dei guasti e aggiornamenti senza interruzione del servizio. Gli orchestratori come \emph{Kubernetes}, \emph{Docker Swarm} e \emph{Apache Mesos} permettono di coordinare in modo efficiente l'esecuzione di applicazioni composte da sciami di microservizi, semplificando la gestione operativa e migliorando la resilienza dei sistemi distribuiti.
-I sistemi di orchestrazione sono centrali in contesti che adottano le filosofie DevOps e CI/CD (Continuous Integration/Continuous Deployment), in quanto consentono di automatizzare il rilascio di nuove versioni del software e la gestione delle infrastrutture in maniera efficiente e affidabile.
+Senza entrare nel dettaglio, un \emph{orchestrator} si occupa di avviare, fermare, monitorare e replicare i container su diversi nodi di un cluster, garantendo alta disponibilità, bilanciamento del carico, gestione dei guasti e aggiornamenti senza interruzione del servizio. Gli orchestratori come \emph{Kubernetes}, \emph{Docker Swarm} e \emph{Apache Mesos} consentono di coordinare in modo efficiente l'esecuzione di applicazioni composte da sciami di microservizi, semplificando la gestione operativa e migliorando la resilienza dei sistemi distribuiti.
+I sistemi di orchestrazione sono centrali in contesti che adottano filosofie come DevOps e CI/CD (Continuous Integration/Continuous Deployment), in quanto consentono di automatizzare il rilascio di nuove versioni del software e la gestione delle infrastrutture in maniera efficiente e affidabile.
 
 \subsection{Microservizi su container: un connubio spontaneo}
 
@@ -162,7 +165,7 @@ I sistemi di orchestrazione sono centrali in contesti che adottano le filosofie 
 
 %API Gateway
 
-%Come identificare i microservizi? Bounded Context
+% p. 108 per container+micros
 
 %    Tradizionalmente, le applicazioni web prevedono la navigazione dell'utente in più pagine web, spesso generate dinamicamente dal server: tale è la filosofia su cui si incentra il modello ASP.NET Core MVC.
 %     Con il passare degli anni, tuttavia, si è assistito a un'evoluzione verso approcci più moderni, come l'adozione di architetture a singola pagina (SPA) e l'utilizzo di framework JavaScript per la gestione della logica di interfaccia utente (e.g. React, Angular, Vue), che hanno reso possibile esperienze di navigazione più fluide, modulari e reattive, a scapito di complessità, manutenibilità, retrocompatibilità e performance.
