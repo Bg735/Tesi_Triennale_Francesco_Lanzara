@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.8.1)  3 SEP 2025 15:21
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.8.1)  4 SEP 2025 09:51
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -633,7 +633,7 @@ Package footmisc Info: Declaring symbol style lamport*-robust on input line 765.
 LaTeX Font Info:    Trying to load font information for T1+lmr on input line 6.
  (/usr/share/texmf/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) (./main.aux (./title.aux) (./abstract.aux) (./ch1.aux) (./ch2.aux) (./ch3.aux))
+) (./main.aux (./title.aux) (./abstract.aux) (./ch1.aux) (./ch2.aux) (./ch3.aux) (./ch4.aux) (./ch5.aux))
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
@@ -731,7 +731,7 @@ Package hyperref Info: Link coloring OFF on input line 6.
 \openout2 = `title.aux'.
 
  (./title.tex
-<fig/Logo_Unisa.png, id=104, 136.00812pt x 137.51375pt>
+<fig/Logo_Unisa.png, id=116, 136.00812pt x 137.51375pt>
 File: fig/Logo_Unisa.png Graphic file (type png)
 <use fig/Logo_Unisa.png>
 Package pdftex.def Info: fig/Logo_Unisa.png  used on input line 13.
@@ -868,11 +868,36 @@ Overfull \hbox (2.45796pt too wide) in paragraph at lines 68--70
 []\T1/lmr/m/n/12 In un con-testo dis-tribuito, non è sem-plice garan-tire le pro-pri-età \T1/lmr/m/it/12 ACID \T1/lmr/m/n/12 di transazioni
  []
 
-[12] [13]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 107.
+[12] [13] [14] [15]
+Underfull \vbox (badness 5274) has occurred while \output is active []
+
+ [16]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 144.
  (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [14] [15] [16]) [17] (./main.lof)
+) [17] [18] [19] [20]) [21]
+\openout2 = `ch4.aux'.
+
+ (./ch4.tex)
+\openout2 = `ch5.aux'.
+
+ (./ch5.tex
+\bbl@ensure@italian {Capitolo} 4.
+[22
+
+
+
+
+
+
+
+]
+<fig/elenco_progetti.png, id=296, 112.92188pt x 127.22531pt>
+File: fig/elenco_progetti.png Graphic file (type png)
+<use fig/elenco_progetti.png>
+Package pdftex.def Info: fig/elenco_progetti.png  used on input line 13.
+(pdftex.def)             Requested size: 173.95749pt x 196.01686pt.
+) [23 <./fig/elenco_progetti.png>] (./main.lof)
 \tf@lof=\write5
 \openout5 = `main.lof'.
 
@@ -880,7 +905,7 @@ File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 \tf@lot=\write6
 \openout6 = `main.lot'.
 
- (./main.bbl [18
+ (./main.bbl [24
 
 
 ]
@@ -888,29 +913,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 4--7
 []\T1/lmr/m/n/12 Microsoft Azure.  Mod-el-lo di transazioni dis-tribuite saga.
  []
 
-) [19
+) [25
 
-] (./main.aux (./title.aux) (./abstract.aux) (./ch1.aux) (./ch2.aux) (./ch3.aux))
+] (./main.aux (./title.aux) (./abstract.aux) (./ch1.aux) (./ch2.aux) (./ch3.aux) (./ch4.aux) (./ch5.aux))
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 8A10F6C404A572E17E6F11C7086B253A;6485.
+(rerunfilecheck)             Checksum: D1EA24757F73829245F31D5F1BA5013A;6977.
  ) 
 Here is how much of TeX's memory you used:
- 20852 strings out of 475468
- 349386 string characters out of 5775650
- 1934975 words of memory out of 5000000
- 42450 multiletter control sequences out of 15000+600000
+ 20934 strings out of 475468
+ 350823 string characters out of 5775650
+ 1936975 words of memory out of 5000000
+ 42505 multiletter control sequences out of 15000+600000
  641025 words of font info for 93 fonts, out of 8000000 for 9000
  417 hyphenation exceptions out of 8191
- 113i,12n,110p,1452b,597s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 113i,11n,110p,1750b,597s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb>
-Output written on main.pdf (22 pages, 355604 bytes).
+Output written on main.pdf (28 pages, 377265 bytes).
 PDF statistics:
- 325 PDF objects out of 1000 (max. 8388607)
- 277 compressed objects within 3 object streams
- 64 named destinations out of 1000 (max. 500000)
- 206 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 378 PDF objects out of 1000 (max. 8388607)
+ 321 compressed objects within 4 object streams
+ 77 named destinations out of 1000 (max. 500000)
+ 235 words of extra memory for PDF output out of 10000 (max. 10000000)
 
