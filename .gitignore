@@ -1,0 +1,5 @@
+# Ignora tutti i main.*
+main.*
+*.aux
+# Ma non ignorare main.pdf
+!main.pdf
