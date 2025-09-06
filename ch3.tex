@@ -4,11 +4,11 @@ Le architetture a microservizi si propongono di estirpare alla radice problemi e
 Un applicativo si definisce \emph{monolitico} quando:
 
 \begin{itemize}
-    \item Un' unica codebase racchiude l'intera logica di business, che è al più suddivisa in moduli. Molti team di sviluppatori con competenze disparate devono collaborare su un unico progetto, integrare grandi quantità di modifiche dipendenti da più moduli e dispiegarle contemporaneamente sui server di produzione;
-    \item Ogni modulo elabora l'interità della logica per il dominio a cui appartiene, e il suo \emph{lifecycle}, ossia l'estensione nel tempo dei periodi di attività e stallo del servizio, è dipendente da ogni altro modulo: se un modulo va "down" (per manutenzione o guasto), l'intero applicativo deve smettere di funzionare;
-    \item I dati di tutti i domini sono gestiti in un unico database centralizzato, accessibile da ogni modulo. Questo è spesso un voluminoso database relazionale che consente di utilizzare facilmente \emph{join} per operazioni inter-modulari, ma può altrettanto facilmente diventare un collo di bottiglia per le performance e la scalabilità dell'applicativo.
-    \item L'applicativo è distribuito come un unico eseguibile, quindi il carico di lavoro assegnabile ad ogni modulo è standardizzato per ogni singola istanza di esecuzione.
-    Ipotizziamo un applicativo con moduli \textbf{A}, \textbf{B} e \textbf{C}, in cui le richieste al solo modulo \textbf{A} superano la sua capacità elaborativa. Per far fronte al problema, sarebbe necessario avviare una seconda istanza dell'applicativo, compresa di moduli \textbf{B} e \textbf{C} (non saturi), causando una dispersione evidente di risorse computazionali e di memoria.
+  \item Un' unica codebase racchiude l'intera logica di business, che è al più suddivisa in moduli. Molti team di sviluppatori con competenze disparate devono collaborare su un unico progetto, integrare grandi quantità di modifiche dipendenti da più moduli e dispiegarle contemporaneamente sui server di produzione;
+  \item Ogni modulo elabora l'interità della logica per il dominio a cui appartiene, e il suo \emph{lifecycle}, ossia l'estensione nel tempo dei periodi di attività e stallo del servizio, è dipendente da ogni altro modulo: se un modulo va "down" (per manutenzione o guasto), l'intero applicativo deve smettere di funzionare;
+  \item I dati di tutti i domini sono gestiti in un unico database centralizzato, accessibile da ogni modulo. Questo è spesso un voluminoso database relazionale che consente di utilizzare facilmente \emph{join} per operazioni inter-modulari, ma può altrettanto facilmente diventare un collo di bottiglia per le performance e la scalabilità dell'applicativo.
+  \item L'applicativo è distribuito come un unico eseguibile, quindi il carico di lavoro assegnabile ad ogni modulo è standardizzato per ogni singola istanza di esecuzione.
+  Ipotizziamo un applicativo con moduli \textbf{A}, \textbf{B} e \textbf{C}, in cui le richieste al solo modulo \textbf{A} superano la sua capacità elaborativa. Per far fronte al problema, sarebbe necessario avviare una seconda istanza dell'applicativo, compresa di moduli \textbf{B} e \textbf{C} (non saturi), causando una dispersione evidente di risorse computazionali e di memoria.
 \end{itemize}
 Per quanto possa sembrare più \emph{semplice} e \emph{intuitivo} iniziare un progetto come soluzione monolitica, i bassi livelli di scalabilità ed evolvibilità della soluzione rendono facile comprendere l'adozione progressivamente maggiore di un approccio basato su microservizi per la progettazione di software distribuiti agili.
 
@@ -36,8 +36,8 @@ In opposizione a questa pratica, i microservizi adottano una filosofia di comuni
 
 Le tipologie di comunicazione adottate nel contesto di un'architettura a microservizi si scandiscono in base a due criteri di selezione\cite[19]{Thesis_microservices}:
 \begin{itemize}
-    \item Comunicazione sincrona o asincrona: determina rispettivamente se il mittente attende una risposta dal destinatario prima di proseguire l'elaborazione, o se può continuare a operare indipendentemente dalla ricezione del messaggio. Una soluzione sincrona diffusa è l'utilizzo del protocollo \textbf{HTTP} per esporre \textbf{API RESTful}, garantendo una comunicazione chiara e \emph{stateless}. Vari pattern di messaggistica asincrona sono invece implementabili mediante il protocollo \textbf{AMQP};
-    \item Comunicazione single-receiver o multi-receiver: stabilisce se il messaggio viene inviata a un singolo interlocutore (il fornitore del servizio richiesto) o in generale a più destinatari (tipici di questa categoria sono protocolli di tipo \emph{publish/subscribe}, fondamentali nella progettazione di sistemi event-driven).
+  \item Comunicazione sincrona o asincrona: determina rispettivamente se il mittente attende una risposta dal destinatario prima di proseguire l'elaborazione, o se può continuare a operare indipendentemente dalla ricezione del messaggio. Una soluzione sincrona diffusa è l'utilizzo del protocollo \textbf{HTTP} per esporre \textbf{API RESTful}, garantendo una comunicazione chiara e \emph{stateless}. Vari pattern di messaggistica asincrona sono invece implementabili mediante il protocollo \textbf{AMQP};
+  \item Comunicazione single-receiver o multi-receiver: stabilisce se il messaggio viene inviata a un singolo interlocutore (il fornitore del servizio richiesto) o in generale a più destinatari (tipici di questa categoria sono protocolli di tipo \emph{publish/subscribe}, fondamentali nella progettazione di sistemi event-driven).
 \end{itemize}
 
 \section{I trade-off della suddivisione in microservizi}
@@ -59,10 +59,10 @@ Per non sovraccaricare il \emph{callee}, i \emph{retry} sono ritardati con andam
 Pur assumendo una comunicazione infallibile tra microservizi, i meccanismi forniti dai DBMS per garantire l'integrità dei dati, prime tra tutti le \textbf{transazioni}, sono indissolubilmente connessi al concetto di operazioni sui dati come elaborazioni compatte e indipendenti, il cui esito non può essere certamente determinato in un processo multi-step su una rete inaffidabile.
 Con il termine \emph{transazione} ci si riferisce ad una sequenza di operazioni effettuate su una base dati che garantisce il rispetto delle proprietà ACID:
 \begin{itemize}
-    \item Atomicity: le operazioni eseguite sono indivisibili: il risultato della transazione viene applicato (\emph{commit}) solo se tutte le operazioni che la compongono hanno avuto successo, altrimenti i loro effetti sono annullati (\emph{rollback});
-    \item Consistency: iniziando in uno stato coerente dei dati, una transazione può solo terminare nello stato precedente o un nuovo stato coerente.
-    \item Isolation: ogni transazione non deve interferire con altre transazioni in esecuzione.
-    \item Durability: alla fine di una transazione le modifiche sono salvate in maniera persistente, puntando a garantire l'integrità dei dati anche in caso di guasti o danni fisici al sistema.
+  \item Atomicity: le operazioni eseguite sono indivisibili: il risultato della transazione viene applicato (\emph{commit}) solo se tutte le operazioni che la compongono hanno avuto successo, altrimenti i loro effetti sono annullati (\emph{rollback});
+  \item Consistency: iniziando in uno stato coerente dei dati, una transazione può solo terminare nello stato precedente o un nuovo stato coerente.
+  \item Isolation: ogni transazione non deve interferire con altre transazioni in esecuzione.
+  \item Durability: alla fine di una transazione le modifiche sono salvate in maniera persistente, puntando a garantire l'integrità dei dati anche in caso di guasti o danni fisici al sistema.
 \end{itemize}
 
 In un contesto distribuito, non è semplice garantire le proprietà \emph{ACID} di transazioni multi-servizio, poiché ognuno di essi gestisce i propri dati in maniera autonoma e le comunicazioni tra di essi possono fallire o essere ritardate. E' necessario introdurre meccanismi di \emph{error safety} per garantire che, in caso di fallimento di una parte del sistema, l'integrità dei dati sia preservata e le operazioni possano essere ripristinate ad uno stato coerente.
@@ -80,9 +80,9 @@ La coreografia affida ai servizi coinvolti il compito di gestire autonomamente l
 
 Nel complesso, il modello di consistenza offerto dalle saghe passa da avere proprietà ACID (pur valido per le transazioni locali), a proprietà BASE:
 \begin{itemize}
-    \item Basic Availability: il fatto che ci sia una saga in corso non impedisce a un'altra richiesta di dare inizio a un'altra saga;
-    \item Soft state: anche in assenza di nuove richieste esterne, lo stato dei dati potrebbe variare finché tutte le saghe concorrenti non sono terminate;
-    \item Eventual consistency: al termine di tutte le saghe concorrenti, i dati saranno in uno stato coerente e letture successive garantiranno gli stessi risultati.
+  \item Basic Availability: il fatto che ci sia una saga in corso non impedisce a un'altra richiesta di dare inizio a un'altra saga;
+  \item Soft state: anche in assenza di nuove richieste esterne, lo stato dei dati potrebbe variare finché tutte le saghe concorrenti non sono terminate;
+  \item Eventual consistency: al termine di tutte le saghe concorrenti, i dati saranno in uno stato coerente e letture successive garantiranno gli stessi risultati.
 \end{itemize}
 
 \subsection{Disacoppiare client e microservizi: i Gateway API}
@@ -141,9 +141,9 @@ Tali proprietà fanno sì che la containerizzazione sia l'approccio ideale per d
 
 L'unico requisito affinché un server possa usufruire di questa feature "\emph{Build Once, Deploy Everywhere}" è l'installazione di un \emph{Docker Engine}, una piattaforma che contiene:
 \begin{itemize}
-    \item Docker Daemon (\texttt{dockerd}), servizio che gestisce i container e le altre entità legate al mondo Docker;
-    \item Docker API, che consente di interagire con il Daemon tramite richieste REST;
-    \item Docker CLI, interfaccia a riga di comando che consente di interagire con il Daemon tramite comandi testuali.
+  \item Docker Daemon (\texttt{dockerd}), servizio che gestisce i container e le altre entità legate al mondo Docker;
+  \item Docker API, che consente di interagire con il Daemon tramite richieste REST;
+  \item Docker CLI, interfaccia a riga di comando che consente di interagire con il Daemon tramite comandi testuali.
 \end{itemize}
 
 \subsubsection{Container contro Virtual Machine}
@@ -157,11 +157,11 @@ Come si fa a distribuire un'applicazione come container?
 In realtà, il container in sé rappresenta la singola istanza di un ambiente isolato di esecuzione, mentre l'artefatto che viene distribuito per consentire la creazione di container è detto \emph{immagine}. Per spiegare intuitivamente la relazione tra immagini e container, riassumiamo il flusso da applicazione software a container.
 
 \begin{itemize}
-    \item Sviluppo dell'applicazione: il codice sorgente dell'applicazione viene realizzato e testato in un ambiente di sviluppo.
-    \item Scrittura del Dockerfile: in base della configurazione desiderata, si compone un file di testo, chiamato \emph{Dockerfile} (privo di estensione), che contiene le informazioni necessarie per costruire l'immagine del container. Tra le altre cose, è obbligatorio specificare la base, un'immagine di partenza a cui aggiungere l'applicativo sviluppato, oltre a dipendenze, variabili e altre configurazioni. Una base può contenere una versione minimale di uno spazio utente, o prevedere delle componenti aggiuntive ottimizzate e pre-installate, come i runtime necessari per l'applicazione. Le immagini di base possono essere caricate dal file system locale o scaricate a \emph{build time} da un registro di immagini online(come Docker Hub).
-    \item Build dell'immagine: a partire dal codice sorgente dell'applicazione e dal Dockerfile, viene generata l'immagine, che rappresenta l'insieme spazio utente + applicazione come definito dalle istruzioni del Dockerfile.
-    \item Distribuzione dell'immagine: l'immagine viene caricata su un registro di immagini (pubblico o privato) da cui può essere scaricata per creare nuovi container.
-    \item Esecuzione del container: scaricando un'immagine, è possibile creare un nuovo container come "istanza" di essa, eventualmente configurabile con variabili e parametri contestuali tramite Docker CLI.
+  \item Sviluppo dell'applicazione: il codice sorgente dell'applicazione viene realizzato e testato in un ambiente di sviluppo.
+  \item Scrittura del Dockerfile: in base della configurazione desiderata, si compone un file di testo, chiamato \emph{Dockerfile} (privo di estensione), che contiene le informazioni necessarie per costruire l'immagine del container. Tra le altre cose, è obbligatorio specificare la base, un'immagine di partenza a cui aggiungere l'applicativo sviluppato, oltre a dipendenze, variabili e altre configurazioni. Una base può contenere una versione minimale di uno spazio utente, o prevedere delle componenti aggiuntive ottimizzate e pre-installate, come i runtime necessari per l'applicazione. Le immagini di base possono essere caricate dal file system locale o scaricate a \emph{build time} da un registro di immagini online(come Docker Hub).
+  \item Build dell'immagine: a partire dal codice sorgente dell'applicazione e dal Dockerfile, viene generata l'immagine, che rappresenta l'insieme spazio utente + applicazione come definito dalle istruzioni del Dockerfile.
+  \item Distribuzione dell'immagine: l'immagine viene caricata su un registro di immagini (pubblico o privato) da cui può essere scaricata per creare nuovi container.
+  \item Esecuzione del container: scaricando un'immagine, è possibile creare un nuovo container come "istanza" di essa, eventualmente configurabile con variabili e parametri contestuali tramite Docker CLI.
 \end{itemize}
 
 \subsection{Persistenza e connettività dei container}
@@ -194,19 +194,91 @@ Tuttavia, quando si tratta di gestire container in produzione, è necessario ado
 Come spiegato chiaramente sul sito di \emph{Red Hat}: "L'orchestrazione dei container è il processo che permette di automatizzare il deployment, la gestione, la scalabilità e il networking dei container attraverso l'intero ciclo di vita, consentendo di distribuire il software in modo uniforme in molto ambienti diversi e su larga scala." \cite{RedHat_Orchestration}
 
 Senza entrare nel dettaglio, un \emph{orchestrator} si occupa di avviare, fermare, monitorare e replicare i container su diversi nodi di un cluster, garantendo alta disponibilità, bilanciamento del carico, gestione dei guasti e aggiornamenti senza interruzione del servizio. Gli orchestratori come \emph{Kubernetes}, \emph{Docker Swarm} e \emph{Apache Mesos} consentono di coordinare in modo efficiente l'esecuzione di applicazioni composte da sciami di microservizi, semplificando la gestione operativa e migliorando la resilienza dei sistemi distribuiti.
-I sistemi di orchestrazione sono centrali in contesti che adottano filosofie come DevOps e CI/CD (Continuous Integration/Continuous Deployment), in quanto consentono di automatizzare il rilascio di nuove versioni del software e la gestione delle infrastrutture in maniera efficiente e affidabile.
+I sistemi di orchestrazione sono centrali in contesti che adottano filosofie come \emph{DevOps} e \emph{CI/CD} (\emph{Continuous Integration/Continuous Deployment}), in quanto consentono di automatizzare il rilascio di nuove versioni del software e la gestione delle infrastrutture in maniera efficiente e affidabile.
 
 \subsection{Microservizi su container: un connubio spontaneo}
 Nello sviluppo di architetture a microservizi, l’adozione di container si configura come una scelta quasi naturale, poiché risponde in modo intrinseco alle esigenze di isolamento, portabilità e scalabilità che caratterizzano questo paradigma. I microservizi, essendo entità autonome e indipendenti, traggono beneficio da un ambiente di esecuzione che garantisca un confine netto rispetto alle dipendenze esterne, preservando al contempo la leggerezza e la rapidità di distribuzione. In aggiunta, la granularità con cui i container possono essere orchestrati (tipicamente tramite gli strumenti sopra accennati) si allinea perfettamente al modello dei microservizi, permettendo di scalare selettivamente solo le componenti che presentano colli di bottiglia, ottimizzando così l’utilizzo delle risorse e garantendo elevata resilienza. In tale prospettiva, i container non soltanto uno strumento per aumentare l'efficienza del deploy, ma diviene un abilitatore architetturale che incarna in maniera pragmatica i principi cardine della filosofia a microservizi.
 Osserviamo nel dettaglio come il deployment in container risponda a un numero nutrito di esigenze specifiche attese dall'adozione di un sistema a microservizi.
 In primo luogo, la portabilità: un microservizio incapsulato in un container può essere eseguito in maniera uniforme su differenti ambienti (dallo sviluppo locale al cluster in cloud), senza dipendere dalle specifiche del sistema operativo o dalle librerie presenti sull’host. In secondo luogo, l’isolamento: ogni microservizio opera all’interno di un contesto dedicato che ne delimita le risorse, le dipendenze e la visibilità di rete, prevenendo conflitti e garantendo maggiore robustezza del sistema complessivo. Altro requisito dei microservizi favorito dalla containerizzazione è la scalabilità dinamica: i container possono essere replicati e gestiti in maniera elastica, consentendo di rispondere con tempestività a variazioni nel carico di lavoro, spesso attraverso gli orchestratori che automatizzano il bilanciamento e il failover. Ancora, la rapidità di provisioning e rilascio: le immagini Docker, essendo versionate e distribuite in registry ottimizzati per il loro storage, consentono un ciclo di Continuous Integration/Continuous Delivery estremamente snello, riducendo i tempi di rilascio e facilitando rollback in caso di regressioni. Infine, la leggerezza e l’efficienza delle risorse: a differenza delle macchine virtuali, i container hanno un footprint ridotto e un avvio pressoché immediato, rendendo più agevole agli elaboratori che ospitano tali ambienti la gestione di un elevato numero di istanze eterogenee. In tal modo, il paradigma dei microservizi trova nel container il proprio substrato tecnico privilegiato, capace di tradurre i principi di indipendenza, modularità e resilienza in pratiche operative concrete ed efficaci.
 
+
 \section{Esporre servizi sul web}
 
-%rest, mq e rpc
+Quando si progetta un'architettura a microservizi, uno dei principali fattori che impattano le performance, la manutenibilità e la scalabilità è la scelta di come i microservizi espongono e fruiscono delle funzionalità di cui si fanno carico. In altre parole, bisogna definire l'\emph{IPC} (Inter-Process Comunication), ossia la struttura con cui i microservizi consentono agli altri elementi del sistema e ai client di interrogare le funzioni cui si propongono di assolvere.
+Ci sono varie categorie di protocolli e standard ben stabiliti, ognuno con i suoi vantaggi e svantaggi e i suoi ambiti applicativi: nel contesto dei servizi web distribuiti, ambito dominante per le architetture a microservizi, si distinguono quattro tecnologie che hanno fatto la storia. Dopo una panoramica sulle tipologie di comunicazione su cui un'API può basarsi, analizzeremo le caratteristiche principali di tali tecnologie e quali utilizzare a seconda dei parametri legati al contesto applicativo specifico.
+
+\section{Tipologie di comunicazione}
+
+Una prima grande distinzione nelle modalità in cui i microservizi possono comunicare è in base al tempo.
+Una comunicazione sincrona prevede che chi avvia la comunicazione rimanga in attesa bloccante di un riscontro: per questo motivo, il ricevente dovrebbe essere in grado di rispondere in tempi brevi ed eseguire in una configurazione ad \textbf{alta disponibilità}. Se il destinatario non è attivo o comunque in grado di recepire il messaggio, l'informazione viene persa. Protocolli che supportano comunicazione sincrona sono ad esempio \textbf{HTTP} e \textbf{gRPC}.
+Una comunicazione asincrona consiste in mittenti che inviano messaggi senza attendere una risposta, eventualmente gestendo l'esito \textbf{quando arriva la risposta, non quando avviene la richiesta}: i destinatari, se previsto, rispondono quando sono disponibili e ritengono opportuno farlo, permettendo di configurare una comunicazione \textbf{flessibile} e aprendo le porte alle infrastrutture event-driven. I protocolli cruciali in quest'ambito sono quelli basati su messaggi, come AMQP.
+
+Una seconda distinzione riguarda il formato delle informazioni scambiate: si distinguono infatti comunicazioni in formati text-based, come JSON o XML, che prediligono la chiarezza dei dati alla performance, e in formati binari, come il Protocol Buffer, che non temono l'aggiunta di un middleware di codifica al fine di ottenere una comunicazione \emph{fulminea ed efficiente}.
+
+Un'altro parametro centrale nella scelta nello stile di comunicazione da adottare è la molteplicità dei destinatari: in una comunicazione punto-punto (o uno-a-uno), ogni messaggio inviato da un microservizio è inteso per uno e un solo altro microservizio; viceversa, in una comunicazione uno-a-molti, il mittente invia il messaggio a più di un destinatario (non è raro che sia ignoto al mittente chi ascolta dall'altra parte) e solitamente non attende una risposta.
+
+L'ultimo elemento fondamentale che determina lo stile di comunicazione è la tipologia di contenuto dei messaggi scambiati. In realtà questa distinzione non categorizza i protocolli, che possono infatti usare più di contenuto: è una distinzione che riguarda la singola comunicazione, e la prevalenza di una categoria su un'altra delinea la filosofia adottata dall'IPC scelta.
+Il messaggi possono essere:
+
+\begin{itemize}
+	\item \emph{informazioni}, se il loro contenuto sono esclusivamente dati
+	\item \emph{comandi}, se l'intento è quello di avviare una certa procedura in uno o più microservizi in ascolto
+	\item \emph{eventi}, se servono a comunicare ai microservizi in ascolto che lo stato del sistema si è evoluto, così che questi possano reagire in modo consono.
+\end{itemize}
+
+
+Volendoci concentrare, per ragioni di brevità, sulle combinazioni di caratteristiche che dominano nel contesto dell'IPC tra microservizi, identifichiamo una prevalenza di comunicazioni \emph{sincrone} di tipo \emph{Request/Response} (di conseguenza, tendenzialmente uno a uno), oppure \emph{asincrone} di tipo \emph{Publisher/Subscriber} (uno a molti) o \emph{Message Queue} (uno a uno).
+
+Per l'IPC sincrona, le soluzioni che costituiscono lo standard di fatto nelle architetture a microservizi sono REST, RPC e GraphQL.
+
+\emph{REST} (\emph{\textbf{RE}presentational \textbf{S}tate \textbf{T}ransfer}) è una filosofia architetturale per l'implementazione di API basate su HTTP acclamata per la facilità di utilizzo e la disponibilità del servizio (è sufficiente HTTP 1.1). Risulta particolarmente vantaggiosa quando il servizio offerto è orientato alle \emph{risorse} piuttosto che alle azioni.
+
+Infatti, tutti i dati scambiati in una comunicazione \emph{RESTful} (aggettivo che descrive un'API che abbraccia i principi della comunicazione REST) sono considerati risorse, la cui manipolazione avviene concordemente al \emph{verbo HTTP} (come GET, PUT, POST e DELETE) associato alla richiesta.
+In buona sostanza, il client di una API RESTful può accedere a determinati URI del dominio a cui è esposto il server e scambiare risorse con esso secondo il tipo di verbo HTTP utilizzato. Ad esempio, una GET all'endpoint /products/\{prodId\} potrebbe essere fatta da un client che vuole accedere a un dato prodotto, mentre un POST a /products consente di aggiungerne uno nuovo. È evidente come, per servizi orientati alle risorse, l'utilizzo di REST risulti naturale ed intuitivo, senza dover apprendere schemi complessi diversi da una documentazione che descriva le chiamate possibili ed eventuali parametri (peraltro, sono disponibili numerosi strumenti che consentono di generare automaticamente tale documentazione, ad esempio per il caso di studio nel capitolo 5 il sottoscritto ha usufruito di Swagger per generare un'interfaccia intuitiva e reattiva che descriva efficacemente le chiamate possibili e la loro struttura).
+
+In realtà, i vincoli da rispettare affinché un'API sia considerata pienamente RESTful sono più stringenti. Accenniamoli brevemente:
+
+\begin{enumerate}
+  \item \textbf{Architettura Client-Server}: Il client è responsabile della user interface e dello stato dell'applicazione, mentre il server gestisce le risorse e il loro stato.
+	\item \textbf{Stateless}: Ogni richiesta dal client al server deve contenere tutte le informazioni necessarie per essere compresa. Il server non deve conservare alcuna informazione di sessione relativa al client tra una richiesta e l'altra. Se un'autenticazione è necessaria, ogni richiesta deve includere le credenziali o un token di autenticazione.
+	\item \textbf{Cacheability}: Le risposte del server devono essere esplicitamente o implicitamente definite come memorizzabili nella cache o meno. Le risposte memorizzabili nella cache riducono la latenza e il carico sul server, migliorando le prestazioni dell'API. Se una risorsa viene contrassegnata come "cacheable", il client può riutilizzare una risposta precedentemente ricevuta per una richiesta successiva, senza dover contattare nuovamente il server.
+	\item \textbf{Interfaccia Uniforme}:
+	\begin{itemize}
+		\item \textbf{Identificazione delle risorse}: Le singole risorse sono identificate da URI.
+		\item \textbf{Manipolazione mediante rappresentazioni}: Quando un client vuole manipolare una risorsa, ne richiede una rappresentazione (in un formato come XML o JSON), la modifica e invia una richiesta al server con la rappresentazione modificata per istruirlo sulle modifiche da apportare.
+		\item \textbf{Messaggi auto-descrittivi}: Ogni messaggio (richiesta e risposta) deve includere informazioni sufficienti per essere elaborato.
+		\item \textbf{Hypermedia as the Engine of Application State (HATEOAS)}: Il client non deve conoscere a priori l'URI di ogni risorsa, ma è compito del server arricchire le proprie risposte con link a risorse correlate che potrebbero essere d'interesse.
+	\end{itemize}
+	\item \textbf{Sistema a strati} La richiesta del client può essere gestita da un intermediario in vece del server finale, senza che il primo ne sia consapevole.
+	\item \textbf{Code on Demand}: Facoltativo. Al server è concesso di estendere la funzionalità del client inviando codice eseguibile (ad esempio, JavaScript o applet).
+\end{enumerate}
+
+Elenchiamo di seguito alcuni svantaggi nell'utilizzo dell'approccio REST, al fine di guidare una scelta consapevole sulla tecnica da adottare per un caso d'uso specifico:
+
+\begin{itemize}
+	\item REST è pensato esclusivamente per una comunicazione sincrona \emph{uno-a-uno} e \emph{Request/Response}, risultando inutilizzabile per qualsiasi altro approccio;
+	\item Risulta meno intuitivo, e anzi forzato, usare REST contesti applicativi in cui le operazioni da eseguire non sono prevalentemente di tipo \emph{CRUD} (\emph{\textbf{C}reate, \textbf{R}ead, \textbf{U}pdate, \textbf{D}elete}), ossia operazioni che creano, leggono, aggiornano o eliminano risorse. In questi casi, un paradigma orientato alle azioni (come RPC) risulta più naturale e performante;
+	\item Basandosi esclusivamente su HTTP, REST non fornisce un modo semplice per ottenere risorse multiple con una sola richiesta: l'approccio atteso sarebbe una chiamata a sé stante per ogni risorsa, il che si traduce in estesi \emph{overhead} che sarebbero altrimenti evitabili;
+	\item L'assenza di un broker per la gestione della comunicazione rende REST semplice e snello, ma HTTP da solo non offre tecniche di message buffering, per cui tale approccio è conveniente solo in presenza di un server ad alta disponibilità, che garantisca di rispondere al client sempre e subito;
+	\item Poiché gli endpoint sono esposti tramite URL, REST risulta poco flessibile in un contesto in cui l'API potrebbe evolvere o migrare. Per garantire una maggiore flessibilità su comunicazione REST, sarebbe necessario introdurre un meccanismo di \emph{discovery} aggiuntivo che consenta ai client di localizzare dinamicamente gli endpoint dell'API.
+\end{itemize}
+
+Nel complesso, le caratteristiche descritte delineano REST come uno stile che predilige la semplicità e la chiarezza al di sopra di performance e funzionalità.
+Una soluzione talvolta proposta come alternativa più strutturata a REST è \emph{GraphQL}.
+Si tratta di un linguaggio d'interrogazione per API che, al costo dell'introduzione di un nodo intermediario e dell'utilizzo di librerie aggiuntive sia lato client che lato server, vanta un sistema di richieste mirate che, previa definizione di uno schema delle risorse, consente al client di ottenere tutte e sole le informazioni necessarie con un'unica richiesta. Tale caratteristica sfida REST in una delle sue principali carenze: la granularità delle risorse è definita dall'API, per cui una distribuzione delle risorse fondamentale per alcune operazioni a grana fine può invece risultare tediosa e mal performante per operazioni su più ampia scala. Inoltre, l'approccio REST di associare ad ogni URI (e dunque ad ogni richiesta) una sola risorsa, impone al client di dover definire internamente algoritmi per il retrieval di informazioni strutturate che si traducono inevitabilmente in sequenza anche estese di richieste HTTP consecutive.
+
+Altre funzionalità che elevano le potenzialità d'uso di GraphQL sono le migration, ossia la possibilità di specificare, direttamente a partire dallo schema delle risorse, delle modifiche sui dati da richiedere al server, e le subscription, ossia la posssibilità di "iscriversi" a date risorse per essere notificati dei loro aggiornamenti.
+
+A seconda della complessità dell'API, dei costi, delle risorse computazionali a disposizione e della chiarezza target, GraphQL può o meno essere considerata un'alternativa preferibile a REST; in ogni caso, quest'ultima rimane la soluzione di gran lunga più adottata nel contesto delle web API per microservizi.
+
+L'altro capostipite dell'IPC sincrona è il paradigma \emph{RPC} (\emph{\textbf{R}emote \textbf{P}rocedure \textbf{C}all}). La caratteristica fondamentale che distanzia REST e RPC è che quest'ultimo standard è pensato per elaborare \emph{azioni}, non risorse.
+Un'immediata conseguenza di una filosofia orientata alle azioni è che l'intento delle chiamate, qui centro del paradigma, non viene più scandito dai verbi HTTP. Lo standard prevede infatti di limitarsi a richieste GET per le azioni read-only e richieste PUT per le operazioni che forniscono o alterano informazioni.
+Nella realizzazione di interfacce con maggior riguardo alle operazioni, RCP rappresenta lo stile più autodescrittivo e di facile comprensione, ed è caratterizzato da performance generalmente più elevate, poiché il payload delle richieste sarà solitamente circoscritto alle informazioni strettamente legate all'azione intrapresa, a differenza di REST che prevede quantità non indifferenti di risorse trasmesse ma inutilizzate.
+I principali drawback di questo stile di progettazione di API derivano dalla modalità di esposizione delle funzionalità: senza vincoli sull'organizzazione e la presentazione delle azioni, la disponibilità di una documentazione ben realizzata diviene imprescindibile, mentre con REST risultava intuitivo comprendere quali verbi siano applicabili a una data risorsa; al contempo, il fatto che ogni azione sia associata a un URL diverso pone il rischio non indifferente di una crescita sregolata degli endpoint all'aumentare delle funzionalità fornite. Un'implementazione che si è stabilita sopra le altre è \textbf{gRPC}, che si distacca ulteriormente dai principi di REST proponendo un sistema di invocazioni basate su \textbf{ProtoBuffer}, tecnologia che permette una formattazione binary-based dei messaggi per garantire efficienza elevata rispetto alle chiamate ripetute e ingombranti di REST.
+gRPC si propone come soluzione cross-language per ottenere chiamate efficienti e fortemente tipizzate nonstante l'approccio language-neutral della comunicazione, ottenuto grazie a una sintassi di definizione delle procedure che costituisce un accordo type-safe tra interfacce basate su framework e linguaggi distinti.
 
 \section{Evoluzione delle applicazioni web}
-
+%comunicazione asincrona?
 %mpa, spa, ajax, sse, websockets, js vs webassembly
 
 \section{}
