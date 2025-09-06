@@ -9,7 +9,7 @@ Un prodotto di questa natura, soprattutto se orientato alla facilità di configu
 
 \footnotetext{A tal fine, risulta imprescindibile segmentare le funzionalità per garantirne la modularità seguendo le esigenze di ciascun profilo utente, da quello operativo a quello dirigenziale. La scelta logica per ottenere questo risultato consiste nella progettazione di un'architettura basata su microservizi, di cui si discuterà in seguito.}
 
-\section{Il caso di studio}
+\section{Obiettivi del progetto}
 Nel panorama appena descritto si concretizza l'obiettivo del tirocinio curriculare oggetto di questa trattazione: l’ideazione e la prototipizzazione di un'architettura software modulare e service-oriented, che esponga un servizio preesistente di generazione automatica di report rendendolo \emph{sicuro, scalabile, personalizzabile e facilmente integrabile} con tool di business intelligence o altri software gestionali preesistenti.
 Come verrà approfondito nel capitolo 4, il progetto prevede l'implementazione di un'architettura a microservizi, isolati mediante l'impiego di container \emph{Docker} che garantiscono sia la scalabilità orizzontale sia la migrazione tra ambienti eterogenei.
 Le funzionalità essenziali da implementare si concretizzano nell'utilizzo del motore di reportistica per realizzare un'interfaccia web, che sia accessibile sia mediante RESTful API, affinché il servizio sia agganciabile da altri applicativi per il settore dei financial services (e.g. tool di business intelligence quali PowerBI o Tableau), sia avvalendosi di un'interfaccia utente che renda immediati e intuitivi la generazione e la condivisione dei report, esportabili in formati diffusi quali Excel (.xlsm) e PDF.
@@ -30,7 +30,7 @@ Il seguito della trattazione si articolerà nelle sezioni seguenti:
 	\item \textbf{Contesto applicativo}, con cenni al settore dei \emph{financial services} e alle esigenze di digitalizzazione e automazione dei processi decisionali che ne caratterizzano l'evoluzione.
 	\item \textbf{Accenni alle architetture distribuite orientate ai microservizi} e descrizione di concetti e principi propri degli applicativi \textbf{software web-based} impiegati contestualmente alla soluzione prodotta.
 	\item \textbf{Panoramica sugli strumenti tecnologici} impiegati, con particolare riferimento alla suite \emph{ASP.NET Core}, framework centrale per la realizzazione della soluzione in esame.
-	\item \textbf{Analisi del caso di studio}, con illustrazione della struttura progettuale, delle scelte implementative e delle prospettive di evoluzione verso scenari di deployment distribuito e multicanale.
+	\item \textbf{Analisi del progetto}, con illustrazione della struttura progettuale, delle scelte implementative e delle prospettive di evoluzione verso scenari di deployment distribuito e multicanale.
 	\item \textbf{Conclusione}
 \end{enumerate}
 
