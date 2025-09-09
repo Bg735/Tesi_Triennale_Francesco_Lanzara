@@ -5,6 +5,31 @@ Il focus sarà sulle tecnologie della suite Microsoft \emph{.NET}, per poi anali
 
 \section{Tecnologie .NET}
 \subsection{Panoramica del framework}
+Microsoft .NET (nello specifico .NET Core / 5+) è un framework di sviluppo open source e multiplatform, che consente lo sviluppo rapido e produttivo di software moderno e performante in una nutrita varietà di ambiti, dallo sviluppo web, cloud, desktop e mobile fino al gaming, all'IoT e al Machine Learning.
+Il cuore della piattaforma è il \textbf{Common Language Runtime (CLR)}, l'engine di esecuzione, a cui sono affidati tutti gli aspetti legati alla gestione della memoria (e.g. \emph{Garbage Collection}), della sicurezza, della gestione delle eccezioni e del multithreading.
+
+Come comportamento predefinito, il codice sorgente dei linguaggi .NET è compilato in un linguaggio intermedio e \emph{platform-independent}, chiamato appunto \textbf{Intermediate Language (IL)}. Il risultato di una build è un file eseguibile, detto \textbf{assembly}, il quale contiene il codice IL, i metadati, le dipendenze, e può opzionalmente essere \emph{self-contained} (ossia include il runtime necessario all'esecuzione). All'utilizzo (avvio dell'eseguibile o invocazione della dll), sarà il \textbf{CLR} a effettuare una compilazione \emph{Just In Time (JIT)} del codice IL in codice macchina nativo, specifico e ottimizzato per l'architettura hardware della macchina che ospita l'esecuzione.
+
+È altresì possibile configurare il compilatore per ottenere un comportamento \emph{Ahead Of Time (AOT)}, in cui il codice IL viene compilato in codice macchina nativo al momento della build, migliorando i tempi di avvio dell'applicazione e riducendo il consumo di memoria: tale alternativa tuttavia inficia sulla portabilità e rinuncia a ottimizzazioni specifiche per l'architettura hardware che sarebbero invece possibili con la compilazione \emph{JIT}.
+
+.NET supporta offre tre linguaggi di programmazione nativi: C\#, F\# e Visual Basic, ma grazie alla presenza del \textbf{Common Type System (CTS)} e del \textbf{Common Language Specification (CLS)}, è possibile utilizzare anche altri linguaggi compatibili, come ad esempio C++/CLI, Python o Ruby.
+
+C\# è il linguaggio più diffuso: si tratta di un linguaggio di programmazione \emph{type-safe}, orientato agli oggetti, con una sintassi \emph{C-like} (ispirata cioè a linguaggi come C, C++ e Java) moderna che ne facilita l'apprendimento e la produttività.
+C\# supporta anche paradigmi di programmazione funzionale, come le espressioni lambda, i delegati e le LINQ (Language Integrated Query), che permettono di scrivere codice conciso ed espressivo e facilitano la manipolazione di collezioni di dati (per esempio LINQ mette a disposizione una sintassi dichiarativa ispirata a SQL per la manipolazione programmatica integrata delle collezioni di dati).
+
+F\# è un linguaggio di programmazione funzionale dalla sintassi concisa, proprietà che lo rendono ideale per scenari che richiedono un'elaborazione complessa dei dati, come il calcolo scientifico, l'analisi finanziaria e il Machine Learning. L'enfasi sulla programmazione funzionale non esclude un supporto per la programmazione imperativa e orientata agli oggetti, tuttavia la sintassi povera di parentesi e annidamenti e le funzionalità del linguaggio pongono il focus sul costruire aggregati operativi potenti piuttosto che "dati con azioni associate".
+
+Visual Basic (VB.NET) è un linguaggio di programmazione ad alto livello, noto per la sua sintassi semplice simile al linguaggio naturale inglese che lo rende accessibile ai principianti. Originariamente sviluppato per la creazione di applicazioni desktop Windows, VB.NET ha visto un declino della popolarità negli ultimi anni, in favore di C\# e F\#. Tuttavia, rimane una scelta valida per progetti legacy o per sviluppatori con esperienza pregressa in Visual Basic.
+
+Per quanto riguarda gli altri linguaggi per cui la piattaforma .NET offre supporto, i metodi di integrazione con il framework variano a seconda del linguaggio, ma si riducono principalmente a due approcci: l'\emph{hosting} su CLR di interpreti/VM per l'esecuzione del codice sorgente, utilizzando \emph{binding} nativi per interfacciarsi con le librerie .NET tramite API specifiche del linguaggio, oppure la compilazione in Intermediate Language (IL) tramite un compilatore dedicato: questa soluzione consente di sfruttare appieno le funzionalità della piattaforma .NET, ma lo sviluppo di un compilatore apposito arriva spesso per linguaggi la cui compatibilità con .NET riceve un supporto maggiore dalla community.
+
+\subsection{ASP.NET Core}
+ASP.NET Core è il framework Microsoft dedicato allo sviluppo di applicazioni e servizi web moderni, scalabili e performanti in ambiente .NET con C\#.
+
+
+
+
+
 
 \subsection{ASP.NET Core Web API}
 \subsection{ASP.NET Core MVC}
