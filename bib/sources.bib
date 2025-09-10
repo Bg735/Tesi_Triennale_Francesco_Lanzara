@@ -13,6 +13,13 @@
   year = {2023}
 }
 
+@book{Pro_ASP.NET,
+  author = {Adam Freeman},
+  publisher = {Manning Publications, Shelter Island, NY},
+  title = {Pro ASP.NET Core 7},
+  year = {2023}
+}
+
 @mastersthesis{Thesis_microservices,
   author = {Francesco Dente},
   school = {Università di Bologna, Dipartimento di Informatica - Scienza e Ingegneria},
@@ -46,130 +53,3 @@
   title = {Web Framework Benchmarks},
   year = {2022}
 }
-[1] Newman, S. (2021). Building Microservices: Designing Fine-Grained Systems. O'Reilly Media.
-[2] Microsoft Docs. (2025). SignalR per ASP.NET Core. [https://learn.microsoft.com/en-us/aspnet/core/signalr/]
-[3] Ranjan, J. (2009). “Business Intelligence: Concepts, Components, Techniques and Benefits.” Journal of Theoretical and Applied Information Technology, 9(1).
-[4] Cabibbo, L. (2021). Architettura del Software: Strutture e Qualità. Edizioni Efesto.
-[5] Tableau Software. (2024). BI Platform Capabilities. [https://www.tableau.com]
-[6] Microsoft. (2025). Microservizi .NET: Architettura per applicazioni .NET in contenitori. [https://learn.microsoft.com]
-[7] Microsoft Docs. (2025). ASP.NET Core Overview. [https://learn.microsoft.com/en-us/aspnet/core/]
-[8] Microsoft Docs. (2025). SignalR per ASP.NET Core. [https://learn.microsoft.com/en-us/aspnet/core/signalr/]
-[9] GitHub – Ocelot API Gateway. (2025). Microservice Routing and Aggregation. [https://github.com/ThreeMammals/Ocelot]
-
-[10] Newman, S. (2021). Building Microservices: Designing Fine-Grained Systems. O'Reilly Media.
-[11] Monk, E., & Wagner, B. (2012). Concepts in Enterprise Resource Planning. Cengage Learning.
-[12] Ranjan, J. (2009). “Business Intelligence: Concepts, Components, Techniques and Benefits.” Journal of Theoretical and Applied Information Technology, 9(1).
-[13] Metabase Documentation. (2024). Open Source Business Intelligence. [https://www.metabase.com/docs]
-[14] Microsoft. (2023). eShopOnContainers Architecture Guide. [https://learn.microsoft.com/en-us/dotnet/architecture/microservices/]
-[15] GitHub – Ocelot API Gateway. (2025). Microservice Routing and Aggregation. [https://github.com/ThreeMammals/Ocelot]
-
-[1] Amazon AWS. Cos’`e l’integrazione continua? https://aws.amazon.com/
-it/devops/continuous-integration/.
-[2] Len Bass, Ingo Weber, and Liming Zhu. DevOps, A Software Architect’s
-Perspective. Pearson, 2015.
-[3] Martin Fowler. Bounded context, 2014. https://martinfowler.com/
-bliki/BoundedContext.html.
-[4] Docker Inc. Docker overview. https://docs.docker.com/engine/
-docker-overview/.
-[5] Microsoft. Communication in a microservice architecture, 2018.
-https://docs.microsoft.com/it-it/dotnet/architecture/
-microservices/architect-microservice-container-applications/
-communication-in-microservice-architecture.
-[6] Microsoft. Containerized docker application lifecycle with the microsoft
-platform and tools, 2019. https://docs.microsoft.com/it-it/dotnet/
-architecture/containerized-lifecycle/index.
-[7] Sam Newman. Principles of microservices, 2015. https://www.youtube.
-com/watch?v=PFQnNFe27kU&t=2480s.
-
-[8] Alessandro Ricci, Angelo Croatti, and Sara Montagna. A personal medi-
-cal digital assistant agent for supporting human operators in emergency
-
-scenarios.
-[9] Chris Richardson. Microservices + events + docker = a perfect trio, 2016.
-https://www.youtube.com/watch?v=sSm2dRarhPo.
-
-
-
-% 3.1 Metodo di progettazione e sviluppo
-% La progettazione del prototipo ha seguito un approccio iterativo e incrementale, ispirato ai principi delle metodologie agili. In particolare, è stato adottato un modello orientato ai servizi, in cui ciascun microservizio è stato progettato per implementare una specifica funzionalità di business. La separazione delle responsabilità tra componenti consente una maggiore manutenibilità, testabilità e scalabilità del sistema [16].
-% La fase di analisi ha previsto la definizione dei requisiti funzionali e non funzionali, la modellazione dei flussi logici mediante diagrammi UML e la scelta delle tecnologie più adatte per garantire interoperabilità e robustezza. La progettazione ha tenuto conto della necessità di integrare il sistema con ambienti esterni, come strumenti di Business Intelligence, e di supportare l’esportazione dei report in formati standardizzati.
-% 3.2 Finalità del sistema prototipale
-% Il sistema è stato concepito per automatizzare la generazione di report aziendali, consentendo agli utenti di selezionare parametri, filtrare dati e ottenere documenti in formato PDF o Excel in modo rapido e coerente. Le finalità principali includono:
-% •	Riduzione del carico operativo manuale.
-% •	Miglioramento della qualità e consistenza dei dati.
-% •	Abilitazione di funzionalità personalizzabili e scalabili.
-% •	Integrazione con ambienti cloud e infrastrutture distribuite.
-% Il prototipo è pensato per essere utilizzato sia da operatori tecnici che da utenti gestionali, offrendo un’interfaccia intuitiva e un sistema di autenticazione centralizzato. La modularità dell’architettura consente l’aggiunta di nuovi microservizi senza impattare sulle componenti esistenti, favorendo l’evoluzione incrementale e la manutenibilità.
-% 3.3 Artefatti progettuali
-% La progettazione del sistema ha prodotto una serie di artefatti tecnici, tra cui:
-% •	Diagrammi dei componenti: rappresentano la suddivisione del sistema in microservizi, ciascuno con responsabilità specifiche (es. generazione report, gestione utenti, esportazione PDF).
-% •	Schema del database: progettato secondo il paradigma relazionale, con tabelle normalizzate e relazioni chiave esterna per garantire integrità referenziale.
-% •	Interfaccia utente: sviluppata in Razor Pages, con layout responsive e componenti dinamici per la selezione dei parametri di reportistica.
-% Il database è stato realizzato in SQL Server, con stored procedure per l’estrazione dei dati e viste materializzate per ottimizzare le performance. La logica di business è incapsulata nei microservizi, che comunicano tra loro tramite API RESTful e, ove necessario, tramite messaggistica asincrona.
-% 3.4 Tecnologie abilitanti
-% Il prototipo si avvale di un ecosistema tecnologico moderno e robusto, tra cui:
-% •	ASP.NET Core 7.0: framework modulare e ad alte prestazioni per lo sviluppo di applicazioni web e API RESTful [17].
-% •	Docker: utilizzato per la containerizzazione dei microservizi, facilitando il deployment e la scalabilità orizzontale [18].
-% •	SignalR: libreria per la comunicazione asincrona in tempo reale tra client e server [19].
-% •	Ocelot API Gateway: gestisce il routing delle richieste verso i microservizi, implementando pattern di aggregazione e sicurezza [20].
-% •	MassTransit + RabbitMQ: framework open-source per la gestione della messaggistica distribuita, che garantisce affidabilità e decoupling [21].
-% L’interfaccia utente è stata sviluppata in ASP.NET Core MVC, con componenti Razor e Bootstrap per garantire responsività e compatibilità cross-browser. Il sistema di autenticazione è basato su JWT (JSON Web Token), con validazione lato server e gestione dei ruoli.
-% 3.5 Implementazione
-% L’implementazione ha seguito una logica modulare, con ciascun microservizio sviluppato come progetto indipendente all’interno di una soluzione .NET. Il pattern architetturale adottato è il Model-View-Controller (MVC), affiancato da WebAPI per l’esposizione dei servizi.
-% L’algoritmo principale per la generazione dei report prevede:
-% 1.	Ricezione dei parametri utente tramite interfaccia web.
-% 2.	Query al database per l’estrazione dei dati filtrati.
-% 3.	Elaborazione e formattazione dei dati in struttura tabellare.
-% 4.	Esportazione in formato PDF o Excel mediante librerie dedicate (es. Spire.DataExport, iTextSharp) [22].
-% Il sistema è stato testato in ambiente locale e containerizzato, con simulazione di carichi e verifica della scalabilità. I microservizi sono orchestrati tramite Docker Compose, con configurazione dei volumi, delle reti e delle variabili d’ambiente.
-% 📎 NOTE BIBLIOGRAFICHE (continua da Capitolo 2)
-% [16] Fowler, M. (2002). Patterns of Enterprise Application Architecture. Addison-Wesley.
-% [17] Microsoft Docs. (2025). ASP.NET Core Overview. [https://learn.microsoft.com/en-us/aspnet/core/]
-% [18] Merkel, D. (2014). “Docker: Lightweight Linux Containers for Consistent Development and Deployment.” Linux Journal, 2014(239).
-% [19] Microsoft Docs. (2025). SignalR per ASP.NET Core. [https://learn.microsoft.com/en-us/aspnet/core/signalr/]
-% [20] GitHub – Ocelot API Gateway. (2025). Microservice Routing and Aggregation. [https://github.com/ThreeMammals/Ocelot]
-% [21] MassTransit Project. (2025). Distributed Application Framework for .NET. [https://masstransit-project.com/]
-% [22] Incerti, A. (2011). Reportistica in ASP.NET con la libreria Spire.DataExport. ASPItalia.com
-% Nel prossimo messaggio ti presenterò il Capitolo 4 – Funzionamento del Prototipo, Conclusioni e Sviluppi Futuri, con la numerazione delle note che proseguirà da [23] in avanti. Sto curando ogni dettaglio con la massima serietà, come merita il lavoro di Francesco.
-
-% Con grande cura, Enrico, e nel pieno rispetto del lavoro di Francesco Lanzara, ti presento ora il Capitolo 4 – Funzionamento del Prototipo, Conclusioni e Sviluppi Futuri, redatto in stile tecnico e accademico, con contenuti completi, ampliati e privi di ridondanze. La numerazione delle note bibliografiche prosegue correttamente da [22] in avanti, garantendo coerenza e continuità con i capitoli precedenti.
-% 📘 CAPITOLO 4 – FUNZIONAMENTO DEL PROTOTIPO, CONCLUSIONI E SVILUPPI FUTURI
-% 4.1 Funzionamento del sistema
-% Il prototipo sviluppato è stato testato in ambiente locale e containerizzato, simulando scenari d’uso realistici e verificando la coerenza tra requisiti funzionali e comportamento del sistema. Il flusso operativo si articola in cinque fasi principali:
-% 1.	Accesso alla piattaforma: l’utente si autentica tramite interfaccia web, accedendo a un’area riservata in cui può selezionare i parametri di reportistica.
-% 2.	Selezione dei parametri: l’interfaccia consente di impostare filtri temporali, categorie, metriche e formati di esportazione.
-% 3.	Elaborazione dei dati: il sistema interroga il database SQL Server, esegue le query parametrizzate e aggrega i risultati in strutture tabellari.
-% 4.	Generazione del report: i dati vengono formattati e convertiti in documenti PDF o Excel, utilizzando librerie come Spire.DataExport e iTextSharp [23].
-% 5.	Download e archiviazione: il report viene reso disponibile per il download e, se previsto, archiviato in un repository documentale.
-% La comunicazione asincrona tra client e server è gestita mediante SignalR, che garantisce reattività e aggiornamento in tempo reale dell’interfaccia utente. L’uso di Docker per la containerizzazione dei microservizi ha semplificato il deployment e migliorato la scalabilità del sistema [24].
-% Il sistema è stato sottoposto a test funzionali e di carico, con particolare attenzione alla gestione delle richieste concorrenti, alla persistenza dei dati e alla robustezza dell’infrastruttura. I risultati hanno confermato la stabilità del prototipo e la sua capacità di adattarsi a contesti operativi complessi.
-% 4.2 Simulazione d’uso
-% Per validare il comportamento del sistema, è stata realizzata una simulazione d’uso basata su un dataset rappresentativo, contenente informazioni relative a pratiche finanziarie, clienti, prodotti e scadenze. L’utente accede alla piattaforma, seleziona un intervallo temporale e richiede la generazione di un report riepilogativo delle pratiche attive.
-% Il sistema elabora la richiesta, interroga il database, aggrega i dati per cliente e per prodotto, e genera un report in formato PDF contenente:
-% •	Intestazione personalizzata con logo e dati aziendali.
-% •	Tabella riepilogativa con colonne dinamiche.
-% •	Grafici a barre e a torta generati tramite librerie JavaScript (Chart.js) integrate nel front-end.
-% •	Sezione conclusiva con note e riferimenti normativi.
-% La simulazione ha evidenziato la capacità del sistema di adattarsi a parametri variabili, di gestire formati multipli e di produrre documenti coerenti, leggibili e conformi agli standard aziendali.
-% 4.3 Conclusioni
-% Il prototipo sviluppato ha dimostrato la validità dell’approccio architetturale adottato, evidenziando i vantaggi della modularità, della scalabilità e della manutenibilità. La reportistica automatizzata si è rivelata efficace nel ridurre il carico operativo, migliorare la qualità dei dati e abilitare funzionalità personalizzabili.
-% L’adozione di microservizi ha permesso di separare le responsabilità, facilitare il testing e il deployment indipendente, e garantire una maggiore resilienza del sistema. L’integrazione con tecnologie moderne come ASP.NET Core, Docker, SignalR e RabbitMQ ha conferito al prototipo robustezza e flessibilità [25].
-% Il sistema è pronto per essere esteso e integrato in ambienti enterprise, con possibilità di adattamento a scenari normativi, gestionali e analitici. La compatibilità con strumenti di Business Intelligence e la disponibilità di API RESTful lo rendono adatto a essere incorporato in ecosistemi digitali più ampi.
-% 4.4 Sviluppi futuri
-% Il prototipo può essere ulteriormente evoluto attraverso una serie di interventi architetturali e funzionali:
-% •	Integrazione con sistemi di autenticazione federata (OAuth2, OpenID Connect), per garantire sicurezza e interoperabilità [26].
-% •	Adozione di tecniche di caching distribuito (es. Redis), per ottimizzare le performance in ambienti ad alta concorrenza [27].
-% •	Estensione del motore di reportistica con funzionalità di visualizzazione interattiva, mediante l’integrazione con librerie JavaScript come Chart.js e D3.js [28].
-% •	Orchestrazione avanzata dei microservizi tramite Kubernetes, per una gestione dinamica delle risorse e una maggiore resilienza dell’infrastruttura [29].
-% •	Monitoraggio e logging centralizzato con strumenti come Prometheus e Grafana, per analizzare metriche e diagnosticare anomalie [30].
-% Questi sviluppi, se accompagnati da una governance architetturale solida, potranno trasformare il prototipo in una soluzione enterprise-ready, capace di rispondere alle esigenze di business intelligence e data governance delle organizzazioni moderne.
-% 📎 NOTE BIBLIOGRAFICHE (continua da Capitolo 3)
-% [23] Incerti, A. (2011). Reportistica in ASP.NET con la libreria Spire.DataExport. ASPItalia.com.
-% [24] Merkel, D. (2014). “Docker: Lightweight Linux Containers for Consistent Development and Deployment.” Linux Journal, 2014(239).
-% [25] Microsoft Docs. (2025). ASP.NET Core Overview. [https://learn.microsoft.com/en-us/aspnet/core/]
-% [26] Hardt, D. (2012). The OAuth 2.0 Authorization Framework. IETF RFC 6749.
-% [27] Redis Labs. (2025). Redis Enterprise Documentation. [https://redis.io/docs]
-% [28] Bostock, M. (2024). D3.js Data-Driven Documents. [https://d3js.org]
-% [29] Kubernetes Documentation. (2025). Production-Grade Container Orchestration. [https://kubernetes.io/docs]
-% [30] Grafana Labs. (2025). Observability and Monitoring Platform. [https://grafana.com]
-% Nel prossimo messaggio ti presenterò la Conclusione Generale e la Bibliografia completa, con tutte le fonti ordinate e numerate. Sto curando ogni dettaglio con la massima serietà, come merita il lavoro di Francesco e il tuo impegno nel guidarlo.
