@@ -1,14 +1,8 @@
 % !TeX root = ../main.tex
 
-%Parametri testuali
 
-
-
-
-
-
-
-
+\setlength{\parindent}{0pt}  % niente indentazione
+\setlength{\parskip}{1.5em}    % spazio verticale tra paragrafi
 
 \usepackage{geometry}
 \newlength{\outermargin}
@@ -28,11 +22,14 @@
 	heightrounded
 }
 \usepackage{listings}
-\lstloadlanguages{C, csh}
+\lstloadlanguages{C}
+
+\usepackage{xcolor}
+\definecolor{lightgreen}{rgb}{0.56, 0.93, 0.56}
 
 \lstset{
-language=csh,
-basicstyle=\footnotesize\ttfamily,
+language=C,
+basicstyle=\ttfamily\small,
 numbers=left,
 numberstyle=\tiny,
 numbersep=5pt,
@@ -40,7 +37,7 @@ tabsize=2,
 extendedchars=true,
 breaklines=true,
 frame=b,
-stringstyle=\color{blue}\ttfamily,
+stringstyle=\color{lightgreen}\ttfamily,
 showspaces=false,
 showtabs=false,
 xleftmargin=17pt,
@@ -70,23 +67,15 @@ delegate, internal, short, void,
 do, is, sizeof, while,
 double, lock, stackalloc,
 else, long, static,
-enum, namespace, string},
+enum, namespace, string, var},
 keywordstyle=\color{cyan},
-identifierstyle=\color{red},
+identifierstyle=\color{orange},
 backgroundcolor=\color{white},
 }
 
 
-\usepackage{xcolor}
 
-\lstset{
-  basicstyle=\ttfamily\small,
-  keywordstyle=\color{cyan},
-  commentstyle=\color{green},
-  stringstyle=\color{orange},
-  showstringspaces=false,
-  breaklines=true
-}
+
 
 \usepackage[utf8]{inputenc}
 \usepackage[font=small]{caption}
